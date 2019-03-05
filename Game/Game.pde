@@ -1,5 +1,6 @@
-float dx, dy, rx, rz; 
-float speed = 1;
+float dx, dy, rx, rz;
+float depth = 200;
+float speed = 1.0;
 
 void settings() {
   size(500, 500, P3D);
@@ -10,7 +11,8 @@ void setup() {
 }
 
 void draw() {
-  camera(); 
+
+  camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
   directionalLight(50, 100, 125, 0, -1, 0); 
   ambientLight(102, 102, 102);
   background(200);
@@ -35,7 +37,36 @@ void mouseDragged() {
   rz = map(dx*speed, 0, width, 0, PI/3);
 }
 
+void keyPressed() {
+  if (key == CODED) {
+    if (keyCode == UP) {
+      if (speed < 2){
+        speed += 0.1;
+      } 
+      else {
+        speed = 2;
+      }
+    }
+    else if (keyCode == DOWN) {
+      if (speed > 0.2){
+        speed -= 0.1;
+      } 
+      else {
+        speed = 0.2;
+      }
+    }
+  }
+}
+
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
-  speed += e;
+  if(depth + e < 150) {
+    depth = 150;
+  } 
+  else if(depth + e > 400) {
+    depth = 400;
+  } 
+  else {
+    depth += e;
+  }
 }

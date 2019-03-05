@@ -1,5 +1,4 @@
 float dx, dy, rx, rz;
-boolean first = true;
 
 void settings() {
   size(500, 500, P3D);

@@ -1,4 +1,5 @@
-float dx, dy, rx, rz;
+float dx, dy, rx, rz; 
+float speed = 1;
 
 void settings() {
   size(500, 500, P3D);
@@ -30,6 +31,11 @@ void mouseReleased() {
 void mouseDragged() {
   dx += mouseX - pmouseX;
   dy += mouseY - pmouseY;
-  rx = map(-dy, 0, height, 0, PI/3);
-  rz = map(dx, 0, width, 0, PI/3);
+  rx = map(-dy*speed, 0, height, 0, PI/3);
+  rz = map(dx*speed, 0, width, 0, PI/3);
+}
+
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  speed += e;
 }

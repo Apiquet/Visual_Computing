@@ -11,7 +11,6 @@ void setup() {
 }
 
 void draw() {
-
   camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
   directionalLight(50, 100, 125, 0, -1, 0); 
   ambientLight(102, 102, 102);
@@ -60,10 +59,10 @@ void keyPressed() {
 
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
-  if(depth + e < 150) {
+  if (depth + e < 150) {
     depth = 150;
   } 
-  else if(depth + e > 400) {
+  else if (depth + e > 400) {
     depth = 400;
   } 
   else {

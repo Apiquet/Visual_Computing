@@ -38,31 +38,35 @@ void mouseDragged() {
 }
 
 void keyPressed() {
-if (key == CODED) {
-if (keyCode == UP) {
-   if (speed < 2){
-      speed += 0.1;
-   } else {
-    speed = 2;
+  if (key == CODED) {
+    if (keyCode == UP) {
+      if (speed < 2){
+        speed += 0.1;
+      } 
+      else {
+        speed = 2;
+      }
+    }
+    else if (keyCode == DOWN) {
+      if (speed > 0.2){
+        speed -= 0.1;
+      } 
+      else {
+        speed = 0.2;
+      }
+    }
   }
-}
-else if (keyCode == DOWN) {
-  if (speed > 0.2){
-      speed -= 0.1;
-  } else {
-    speed = 0.2;
-  }
-}
-}
 }
 
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
-  if(depth + e < 150){
+  if(depth + e < 150) {
     depth = 150;
-  } else if(depth + e > 400){
+  } 
+  else if(depth + e > 400) {
     depth = 400;
-  } else{
+  } 
+  else {
     depth += e;
   }
 }

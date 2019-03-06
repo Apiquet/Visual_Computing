@@ -36,12 +36,16 @@ void mouseReleased() {
 void mouseDragged() {
   dx += mouseX - pmouseX;
   dy += mouseY - pmouseY;
-  rx = map(-dy*speed, 0, height, 0, PI/3);
-  rz = map(dx*speed, 0, width, 0, PI/3);
-  if(rz>radians(60)) rz=radians(60);
-  else if(rz<radians(-60)) rz=radians(-60);
-  if(rx>radians(60)) rx=radians(60);
-  else if(rx<radians(-60)) rx=radians(-60);
+  rx = map(-dy*speed, 0, height, 0, PI);
+  rz = map(dx*speed, 0, width, 0, PI);
+  if (rz > radians(60)) 
+    rz = radians(60);
+  else if (rz < radians(-60)) 
+    rz = radians(-60);
+  if (rx > radians(60)) 
+    rx = radians(60);
+  else if (rx < radians(-60)) 
+    rx = radians(-60);
 }
 
 void keyPressed() {

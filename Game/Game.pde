@@ -16,9 +16,13 @@ void draw() {
   ambientLight(102, 102, 102);
   background(200);
   translate(width/2, height/2, 0);
+  pushMatrix();
   rotateX(rx);
   rotateZ(rz);
   box(100, 5, 100);
+  popMatrix();
+  textSize(8); 
+  text("RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed),-110,-100);
 }
 
 void mousePressed() {

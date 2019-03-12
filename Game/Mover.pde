@@ -17,9 +17,9 @@ class Mover {
     friction = new PVector(0,0,0);
     gravityConstant = 1;
     normalForce = 1;
-    mu = 0.5;
+    mu = 0.05;
     frictionMagnitude = normalForce * mu;
-    elasticityFactor = 0.8;
+    elasticityFactor = 0.9;
   }
   
   void update(float rotX, float rotZ) {
@@ -48,22 +48,18 @@ class Mover {
     if ((location.x > 50)) {
       location.x = 50;
       velocity.x = (velocity.x) * -elasticityFactor;
-      
     }
     if ((location.x < -50)) {
       location.x = -50;
       velocity.x = (velocity.x) * -elasticityFactor;
-      
     }
     if ((location.z > 50)) {
       location.z = 50;
       velocity.z = (velocity.z) * -elasticityFactor;
-      
     }
     if ((location.z < -50)) {
       location.z = -50;
       velocity.z = (velocity.z) * -elasticityFactor;
-      
     }
   }
 }

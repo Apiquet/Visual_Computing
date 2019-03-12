@@ -1,0 +1,49 @@
+Mover mover;
+void settings() {
+  size(800, 200);
+}
+void setup() {
+  mover = new Mover();
+}
+void draw() {
+  background(255);
+  mover.update();
+  mover.checkEdges();
+  mover.display();
+}
+class Mover {
+  PVector location;
+  PVector velocity;
+  PVector gravity;
+  Mover() {
+    gravity = new PVector(0, 0.5);
+    location = new PVector(width/2, height/2);
+    velocity = new PVector(1, 1);
+  }
+  void update() {
+    
+    velocity.add(gravity);
+    location.add(velocity);
+  }
+  void display() {
+    stroke(0);
+    strokeWeight(2);
+    fill(127);
+    ellipse(location.x, location.y, 48, 48);
+  }
+  void checkEdges() {
+    // Add the current speed to the location.
+    if ((location.x > width) || (location.x < 0)) {
+      velocity.x = velocity.x * -1;
+    }
+    if ((location.y > height) || (location.y < 0)) {
+      velocity.y = (velocity.y-0.5) * -1;
+      location.y = height;
+    }
+    if ((location.y > height)) {
+      velocity.y = 0;
+      gravity.y = 0;
+    }
+
+  }
+}

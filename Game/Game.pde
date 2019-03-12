@@ -1,6 +1,8 @@
 float dx, dy, rx, rz;
 float depth = 200;
 float speed = 1.0;
+Mover mover;
+
 
 void settings() {
   size(500, 500, P3D);
@@ -8,6 +10,7 @@ void settings() {
 
 void setup() {
   stroke(0);
+  mover = new Mover();
 }
 
 void draw() {
@@ -20,6 +23,10 @@ void draw() {
   rotateX(rx);
   rotateZ(rz);
   box(100, 5, 100);
+  translate(0, -13, 0);
+  mover.update(rx,rz);
+  mover.checkEdges();
+  mover.display();
   popMatrix();
   textSize(8); 
   text("RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed),-110,-100);
@@ -79,5 +86,58 @@ void mouseWheel(MouseEvent event) {
   } 
   else {
     depth += e;
+  }
+}
+class Mover {
+  PVector location;
+  PVector velocity;
+  PVector gravityForce;
+  float gravityConstant = 1;
+  Mover() {
+    gravityForce = new PVector(0, 0,0);
+    location = new PVector(0,0,0);
+    velocity = new PVector(0,0,0);
+  }
+  void update(float rotX, float rotZ) {
+    
+    gravityForce.x = sin(rotZ) * gravityConstant;
+    gravityForce.z = sin(rotX) * gravityConstant;
+    float normalForce = 1;
+    float mu = 0.01;
+    float frictionMagnitude = normalForce * mu;
+    PVector friction = velocity.copy();
+    friction.mult(-1);
+    friction.normalize();
+    friction.mult(frictionMagnitude);
+    velocity.add(gravityForce);
+    location.add(velocity);
+  }
+  void display() {
+    stroke(0);
+    strokeWeight(2);
+    fill(127);
+    //ellipse(location.x, location.y, 48, 48);
+    translate(location.x, 0, -location.z);
+    sphere(10);
+
+  }
+  void checkEdges() {
+    // Add the current speed to the location.
+    if ((location.x >= 50)) {
+      velocity.x = (velocity.x-1) * -1;
+      location.x = 49;
+    }
+    if ((location.x <= -50)) {
+      velocity.x = (velocity.x+1) * -1;
+      location.x = -49;
+    }
+    if ((location.z >= 50)) {
+      velocity.z = (velocity.z-1) * -1;
+      location.z = 49;
+    }
+    if ((location.z <= -50)) {
+      velocity.z = (velocity.z+1) * -1;
+      location.z = -49;
+    }
   }
 }

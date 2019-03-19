@@ -1,8 +1,8 @@
 Mover mover;
 float dx, dy, rx, rz;
-float depth = 200;
+float depth = 500;
 float speed = 1.0;
-float box_size = 100;
+float box_size = 300;
 PFont f;
 PShape globe;
 float rayon = 10;

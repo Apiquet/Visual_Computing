@@ -6,6 +6,7 @@ float box_size = 300;
 PFont f;
 PShape globe;
 float rayon = 10;
+boolean shiftIsPressed = false;
 
 void settings()
 {
@@ -30,27 +31,30 @@ void setup()
 
 void draw() 
 {
-  
-  camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
-  directionalLight(50, 100, 125, 0, -1, 0); 
-  ambientLight(102, 102, 102);
-  background(225);
-  translate(width/2, height/2, 0);
-  pushMatrix();
-  rotateX(rx);
-  rotateZ(rz);
-  fill(220);
-  box(box_size, 5, box_size);
-  mover.update(rx, rz);
-  mover.checkEdges(box_size/2);
-  mover.display(rayon);
-  popMatrix();
-  // text parameters
-  fill(0);
-  textFont(f); 
-  textSize(8);
-  text("RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed),-110,-100,depth-200);
-  
+  if (shiftIsPressed) {
+    
+  }else{
+    
+    camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
+    directionalLight(50, 100, 125, 0, -1, 0); 
+    ambientLight(102, 102, 102);
+    background(225);
+    translate(width/2, height/2, 0);
+    pushMatrix();
+    rotateX(rx);
+    rotateZ(rz);
+    fill(220);
+    box(box_size, 5, box_size);
+    mover.update(rx, rz);
+    mover.checkEdges(box_size/2);
+    mover.display(rayon);
+    popMatrix();
+    // text parameters
+    fill(0);
+    textFont(f); 
+    textSize(8);
+    text("RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed),-110,-100,depth-200);
+  }
   
 }
 
@@ -114,5 +118,14 @@ void mouseWheel(MouseEvent event)
   else
   {
     depth += e;
+  }
+}
+
+void keyReleased(){
+  if (key==CODED){
+    if (keyCode == SHIFT){
+      if(shiftIsPressed) shiftIsPressed = false;
+      else shiftIsPressed = true;
+    }
   }
 }

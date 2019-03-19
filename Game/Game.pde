@@ -7,6 +7,7 @@ PFont f;
 PShape globe;
 float rayon = 10;
 boolean shiftIsPressed = false;
+boolean shiftModeEnabled = false;
 float cylinderBaseSize = 20;
 float cylinderHeight = 20;
 int cylinderResolution = 40;
@@ -108,6 +109,13 @@ void draw()
     pushMatrix();
     rotateX(rx);
     rotateZ(rz);
+    for( int i = 0; i < clicks.size(); i++){
+      pushMatrix();
+      translate(clicks.get(i).x - box_size + 2*cylinderBaseSize, 0, clicks.get(i).y - box_size + 2*cylinderBaseSize);
+      rotateX(radians(90));
+      shape(openCylinder);
+      popMatrix();
+    }
     fill(220);
     box(box_size, 5, box_size);
     mover.update(rx, rz);
@@ -203,5 +211,6 @@ void keyReleased(){
 }
 
 void mouseClicked() {
-  if(mouseX < box_size + width/4 - 2*cylinderBaseSize && mouseY < box_size + height/4 - 2*cylinderBaseSize && mouseX > width/4 && mouseY > height/4)  clicks.add( new PVector( mouseX, mouseY, millis() ) );
+  if(mouseX < box_size + width/4 - 2*cylinderBaseSize && mouseY < box_size + height/4 - 2*cylinderBaseSize && mouseX > width/4 && mouseY > height/4)  
+    clicks.add( new PVector( mouseX, mouseY, millis() ) );
 }

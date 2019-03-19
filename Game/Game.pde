@@ -62,7 +62,7 @@ void draw()
     background(225);
     pushMatrix();
     translate(width/2, height/2, 0);
-    rotateX(90);
+    rotateX(radians(90));
     rotateZ(0);
     fill(220);
     box(box_size, 5, box_size);

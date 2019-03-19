@@ -100,7 +100,6 @@ void draw()
     shape(openCylinder);
     popMatrix();
   }else{
-    
     camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
     directionalLight(50, 100, 125, 0, -1, 0); 
     ambientLight(102, 102, 102);
@@ -204,5 +203,5 @@ void keyReleased(){
 }
 
 void mouseClicked() {
-  clicks.add( new PVector( mouseX, mouseY, millis() ) );
+  if(mouseX < box_size + width/4 - 2*cylinderBaseSize && mouseY < box_size + height/4 - 2*cylinderBaseSize && mouseX > width/4 && mouseY > height/4)  clicks.add( new PVector( mouseX, mouseY, millis() ) );
 }

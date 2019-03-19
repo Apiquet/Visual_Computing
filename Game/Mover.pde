@@ -8,8 +8,8 @@ class Mover {
   Mover() 
   {
     gravityForce = new PVector(0,0,0);
-    location = new PVector(0, 0, 0);
-    velocity = new PVector(0, 0, 0);
+    location = new PVector(0,0,0);
+    velocity = new PVector(0,0,0);
   }
   
   void update(float rotx, float rotz)
@@ -56,6 +56,17 @@ class Mover {
     if ((location.z <= -box_edge)) {
       velocity.z = velocity.z * -1;
       location.z = -box_edge;
+    }
+  }
+  
+  void ckeckCylinderCollision(ArrayList<PVector> Cylinderlocations, float rayon) {
+    for(int i=0; i < Cylinderlocations.size(); i++) {
+      float center_x = Cylinderlocations.get(i).x;
+      float center_y = Cylinderlocations.get(i).y;
+      if (pow((location.x-center_x),2) + pow((location.z-center_y),2) < pow(rayon,2)) {
+        //n??
+        velocity = velocity.sub(2*(velocity.dot(n.normalize())).mult(n.normalize()));
+      }
     }
   }
 }

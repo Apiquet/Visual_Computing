@@ -7,11 +7,11 @@ PFont f;
 PShape globe;
 float rayon = 10;
 boolean shiftIsPressed = false;
-boolean shiftModeEnabled = false;
 float cylinderBaseSize = 20;
 float cylinderHeight = 20;
 int cylinderResolution = 40;
-ArrayList<PVector> clicks = new ArrayList();
+ArrayList<PVector> clicks_shiftEnabled = new ArrayList();
+ArrayList<PVector> clicks_shiftDisabled = new ArrayList();
 boolean was_clicked = false;
 PShape openCylinder = new PShape();
 
@@ -90,9 +90,9 @@ void draw()
     fill(220);
     box(box_size, 5, box_size);
     popMatrix();
-    for( int i = 0; i < clicks.size(); i++){
+    for( int i = 0; i < clicks_shiftEnabled.size(); i++){
       pushMatrix();
-      translate(clicks.get(i).x, clicks.get(i).y, 0);
+      translate(clicks_shiftEnabled.get(i).x, clicks_shiftEnabled.get(i).y, 0);
       shape(openCylinder);
       popMatrix();
     }
@@ -109,9 +109,9 @@ void draw()
     pushMatrix();
     rotateX(rx);
     rotateZ(rz);
-    for( int i = 0; i < clicks.size(); i++){
+    for( int i = 0; i < clicks_shiftDisabled.size(); i++){
       pushMatrix();
-      translate(clicks.get(i).x - box_size + 2*cylinderBaseSize, 0, clicks.get(i).y - box_size + 2*cylinderBaseSize);
+      translate(clicks_shiftDisabled.get(i).x, 0, clicks_shiftDisabled.get(i).y);
       rotateX(radians(90));
       shape(openCylinder);
       popMatrix();
@@ -211,6 +211,9 @@ void keyReleased(){
 }
 
 void mouseClicked() {
-  if(mouseX < box_size + width/4 - 2*cylinderBaseSize && mouseY < box_size + height/4 - 2*cylinderBaseSize && mouseX > width/4 && mouseY > height/4)  
-    clicks.add( new PVector( mouseX, mouseY, millis() ) );
+  if(shiftIsPressed && mouseX < box_size + width/4 - 2*cylinderBaseSize && mouseY < box_size + height/4 - 2*cylinderBaseSize && mouseX > width/4 && mouseY > height/4) { 
+    clicks_shiftEnabled.add( new PVector( mouseX, mouseY, millis() ) );
+    clicks_shiftDisabled.add( new PVector( mouseX- box_size + 2*cylinderBaseSize, mouseY - box_size + 2*cylinderBaseSize, millis() ) );
+    
+  }
 }

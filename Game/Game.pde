@@ -34,23 +34,45 @@ void setup()
   globe.setStroke(false);
   
   float angle;
-  float[] x = new float[cylinderResolution + 1];
-  float[] y = new float[cylinderResolution + 1];
-  //get the x and y position on a circle for all the sides
-  for(int i = 0; i < x.length; i++) {
-  angle = (TWO_PI / cylinderResolution) * i;
-  x[i] = sin(angle) * cylinderBaseSize;
-  y[i] = cos(angle) * cylinderBaseSize;
+  float[] x = new float[cylinderResolution+1];
+  float[] y = new float[cylinderResolution+1];
+ 
+  //get the x and z position on a circle for all the cylinderResolution
+  for(int i=0; i < x.length; i++){
+    angle = TWO_PI / (cylinderResolution) * i;
+    x[i] = sin(angle) * cylinderBaseSize;
+    y[i] = cos(angle) * cylinderBaseSize;
   }
+  
   openCylinder = createShape();
-  openCylinder.beginShape(QUAD_STRIP);
-  //draw the border of the cylinder
-  for(int i = 0; i < x.length; i++) {
-  openCylinder.vertex(x[i], y[i] , 0);
-  openCylinder.vertex(x[i], y[i], cylinderHeight);
-  }
+  
+  //draw the cylinderBaseSize of the cylinder
+  openCylinder.beginShape(TRIANGLE_FAN);
+    openCylinder.vertex(0, 0, 0);
+    for(int i=0; i < x.length; i++){
+      openCylinder.vertex(x[i], y[i], 0);
+    }
   openCylinder.endShape();
-
+ 
+  //draw the center of the cylinder
+  openCylinder.beginShape(QUAD_STRIP); 
+    for(int i=0; i < x.length; i++){
+      openCylinder.vertex(x[i], y[i], 0);
+      openCylinder.vertex(x[i], y[i], cylinderHeight);
+    }
+  openCylinder.endShape();
+ 
+  //draw the cylinderBaseSize of the cylinder
+  openCylinder.beginShape(TRIANGLE_FAN); 
+    openCylinder.vertex(0, 0, 0);
+    for(int i=0; i < x.length; i++){
+      openCylinder.vertex(x[i], y[i], cylinderHeight);
+    }
+  openCylinder.endShape();
+  
+  PImage tree = loadImage("tree.jpg");
+  openCylinder.setTexture(tree);
+  openCylinder.setStroke(true);
 }
 
 void draw() 

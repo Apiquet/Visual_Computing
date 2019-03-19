@@ -7,6 +7,12 @@ PFont f;
 PShape globe;
 float rayon = 10;
 boolean shiftIsPressed = false;
+float cylinderBaseSize = 20;
+float cylinderHeight = 20;
+int cylinderResolution = 40;
+ArrayList<PVector> clicks = new ArrayList();
+boolean was_clicked = false;
+PShape openCylinder = new PShape();
 
 void settings()
 {
@@ -26,13 +32,51 @@ void setup()
   globe = createShape(SPHERE, rayon); 
   globe.setTexture(earth);
   globe.setStroke(false);
+  
+  float angle;
+  float[] x = new float[cylinderResolution + 1];
+  float[] y = new float[cylinderResolution + 1];
+  //get the x and y position on a circle for all the sides
+  for(int i = 0; i < x.length; i++) {
+  angle = (TWO_PI / cylinderResolution) * i;
+  x[i] = sin(angle) * cylinderBaseSize;
+  y[i] = cos(angle) * cylinderBaseSize;
+  }
+  openCylinder = createShape();
+  openCylinder.beginShape(QUAD_STRIP);
+  //draw the border of the cylinder
+  for(int i = 0; i < x.length; i++) {
+  openCylinder.vertex(x[i], y[i] , 0);
+  openCylinder.vertex(x[i], y[i], cylinderHeight);
+  }
+  openCylinder.endShape();
 
 }
 
 void draw() 
 {
   if (shiftIsPressed) {
-    
+    camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
+    directionalLight(50, 100, 125, 0, -1, 0); 
+    ambientLight(102, 102, 102);
+    background(225);
+    pushMatrix();
+    translate(width/2, height/2, 0);
+    rotateX(90);
+    rotateZ(0);
+    fill(220);
+    box(box_size, 5, box_size);
+    popMatrix();
+    for( int i = 0; i < clicks.size(); i++){
+      pushMatrix();
+      translate(clicks.get(i).x, clicks.get(i).y, 0);
+      shape(openCylinder);
+      popMatrix();
+    }
+    pushMatrix();
+    translate(mouseX, mouseY, 0);
+    shape(openCylinder);
+    popMatrix();
   }else{
     
     camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
@@ -128,4 +172,8 @@ void keyReleased(){
       else shiftIsPressed = true;
     }
   }
+}
+
+void mouseClicked() {
+  clicks.add( new PVector( mouseX, mouseY, millis() ) );
 }

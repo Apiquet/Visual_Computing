@@ -120,6 +120,7 @@ void draw()
     box(box_size, 5, box_size);
     mover.update(rx, rz);
     mover.checkEdges(box_size/2);
+    mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize/2);
     mover.display(rayon);
     popMatrix();
     // text parameters

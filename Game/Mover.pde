@@ -64,10 +64,7 @@ class Mover {
       float distance = dist(location.x, location.y, location.z, Cylinderlocations.get(i).x, 0, Cylinderlocations.get(i).y * -1);
       
       println("Distance: " + distance);
-      println("cylinder x: " + Cylinderlocations.get(i).x + ", y: " + 0 + ", z: " + Cylinderlocations.get(i).y * -1);
-      println("sphere x: " + location.x + ", y: " + location.y + ", z: " + location.z);
       if (distance < radiusCylinder+radiusSphere) {
-        print("salut");
         PVector n = new PVector(location.x - Cylinderlocations.get(i).x,0,location.z - Cylinderlocations.get(i).y * -1);
         velocity.sub(n.mult(2*(velocity.dot(n))));
       }

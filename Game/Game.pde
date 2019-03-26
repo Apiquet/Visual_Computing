@@ -17,7 +17,7 @@ boolean was_clicked = false;
 PShape openCylinder = new PShape();
 PVector particle_origin;
 boolean particle_ON = false;
-
+PShape robotnik;
 void settings()
 {
   size(500, 500, P3D);
@@ -29,6 +29,7 @@ void setup()
   
   stroke(0);
   mover = new Mover();
+  robotnik = loadShape("robotnik.obj");
 
 
   //text parameter
@@ -119,7 +120,9 @@ void draw()
       pushMatrix();
       translate(clicks_shiftDisabled.get(i).x, 0, clicks_shiftDisabled.get(i).z);
       rotateX(radians(90));
+      shape(robotnik, 100, 100, 80, 80);
       shape(openCylinder);
+
       popMatrix();
     }
     if(particle_ON){
@@ -219,7 +222,6 @@ void keyReleased(){
     if (keyCode == SHIFT){
       if(shiftIsPressed){
         shiftIsPressed = false;
-        particle_ON = true;
       }
       else shiftIsPressed = true;
     }
@@ -228,12 +230,14 @@ void keyReleased(){
 
 void mouseClicked() {
   if(shiftIsPressed && mouseX < box_size + width/4 - 2*cylinderBaseSize && mouseY < box_size + height/4 - 2*cylinderBaseSize && mouseX > width/4 && mouseY > height/4) { 
+      clicks_shiftDisabled.clear();
+      clicks_shiftEnabled.clear();
       if(clicks_shiftDisabled.size()==0){
         clicks_shiftEnabled.add( new PVector( mouseX, mouseY, 0 ) );
         clicks_shiftDisabled.add( new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize) );
         particle_origin = new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize );
         ParticleSystem = new ParticleSystem(particle_origin);
-
+        particle_ON = true;
       }
   }
 }

@@ -1,4 +1,5 @@
 Mover mover;
+ParticleSystem ParticleSystem;
 float dx, dy, rx, rz;
 float depth = 500;
 float speed = 1.0;
@@ -14,16 +15,21 @@ ArrayList<PVector> clicks_shiftEnabled = new ArrayList();
 ArrayList<PVector> clicks_shiftDisabled = new ArrayList();
 boolean was_clicked = false;
 PShape openCylinder = new PShape();
+PVector particle_origin;
 
 void settings()
 {
   size(500, 500, P3D);
+  particle_origin = new PVector(0,0,0);
 }
 
 void setup() 
 {
+  
   stroke(0);
   mover = new Mover();
+  ParticleSystem = new ParticleSystem(particle_origin);
+
 
   //text parameter
   f = createFont("Arial",32,true); 
@@ -105,6 +111,8 @@ void draw()
     directionalLight(50, 100, 125, 0, -1, 0); 
     ambientLight(102, 102, 102);
     background(225);
+    ParticleSystem.addParticle();
+    ParticleSystem.run();
     translate(width/2, height/2, 0);
     pushMatrix();
     rotateX(rx);

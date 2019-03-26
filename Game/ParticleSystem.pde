@@ -19,6 +19,10 @@ class ParticleSystem {
       center = particles.get(index).center.copy();
       // Try to add an adjacent cylinder.
       float angle = random(TWO_PI);
+      if(particles.size() == 0){
+        shiftIsPressed = true;
+        return;
+      }
       center.x += sin(angle) * 2*particleRadius;
       center.z += cos(angle) * 2*particleRadius;
       if(checkPosition(center)) {

@@ -12,6 +12,7 @@ float cylinderBaseSize = 10;
 float cylinderHeight = 20;
 int cylinderResolution = 40;
 ArrayList<PVector> clicks_shiftEnabled = new ArrayList();
+PVector robotnik_pos;
 ArrayList<PVector> clicks_shiftDisabled = new ArrayList();
 boolean was_clicked = false;
 PShape openCylinder = new PShape();
@@ -125,9 +126,9 @@ void draw()
     }
     if(clicks_shiftDisabled.size()>0){
       pushMatrix();
-      translate(clicks_shiftDisabled.get(0).x, 0, clicks_shiftDisabled.get(0).z);
-      rotateX(radians(90));
-      shape(robotnik, 100, 100, 80, 80);
+      translate(robotnik_pos.x, 0, robotnik_pos.z);
+      rotateX(radians(180));
+      shape(robotnik, 0,0, 80, 80);
       popMatrix();
     }
     if(particle_ON){
@@ -240,6 +241,7 @@ void mouseClicked() {
       if(clicks_shiftDisabled.size()==0){
         clicks_shiftEnabled.add( new PVector( mouseX, mouseY, 0 ) );
         clicks_shiftDisabled.add( new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize) );
+        robotnik_pos = new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize);
         particle_origin = new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize );
         ParticleSystem = new ParticleSystem(particle_origin);
         particle_ON = true;

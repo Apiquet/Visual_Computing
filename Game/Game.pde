@@ -15,11 +15,13 @@ ArrayList<PVector> clicks_shiftDisabled = new ArrayList();
 boolean was_clicked = false;
 PShape openCylinder = new PShape();
 
-void settings(){
+void settings()
+{
   size(500, 500, P3D);
 }
 
-void setup() {
+void setup() 
+{
   stroke(0);
   mover = new Mover();
 
@@ -74,7 +76,8 @@ void setup() {
   openCylinder.setStroke(true);
 }
 
-void draw() {
+void draw() 
+{
   if (shiftIsPressed) {
     camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
     directionalLight(50, 100, 125, 0, -1, 0); 
@@ -125,7 +128,8 @@ void draw() {
     textFont(f); 
     textSize(8);
     text("RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed),-110,-100,depth-200);
-  } 
+  }
+  
 }
 
 void mousePressed() {

@@ -8,7 +8,7 @@ PFont f;
 PShape globe;
 float rayon = 10;
 boolean shiftIsPressed = false;
-float cylinderBaseSize = 20;
+float cylinderBaseSize = 10;
 float cylinderHeight = 20;
 int cylinderResolution = 40;
 ArrayList<PVector> clicks_shiftEnabled = new ArrayList();
@@ -123,7 +123,9 @@ void draw()
       popMatrix();
     }
     if(particle_ON){
-      ParticleSystem.addParticle();
+      if(frameCount % 20 == 0){
+        ParticleSystem.addParticle();
+      }
       ParticleSystem.run();
     }
     fill(220);

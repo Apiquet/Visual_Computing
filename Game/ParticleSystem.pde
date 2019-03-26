@@ -2,7 +2,7 @@
 class ParticleSystem {
   ArrayList<Particle> particles;
   PVector origin;
-  float particleRadius = 20;
+  float particleRadius = 10;
   
   ParticleSystem(PVector origin) {
     this.origin = origin.copy();
@@ -33,12 +33,16 @@ class ParticleSystem {
   // (for each particle, call checkOverlap())
   // - is inside the board boundaries
   boolean checkPosition(PVector center) {
-    for(int i=0; i < particles.size(); i++) {
-      if (checkOverlap(center, particles.get(i).center) == false) {
-        return false;
-      }
+    
+    if(center.x < box_size + width/4 - 2*particleRadius && center.z < box_size + height/4 - 2*particleRadius && center.x > width/4 && center.z > height/4) { 
+        for(int i=0; i < particles.size(); i++) {
+          if (checkOverlap(center, particles.get(i).center) == false) {
+            return false;
+          }
+        }
+        return true;
     }
-    return true;
+    return false;
   }
 
   // Check if a particle with center c1

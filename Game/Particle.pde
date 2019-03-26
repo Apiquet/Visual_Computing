@@ -24,7 +24,11 @@ class Particle {
   void display() {
     stroke(255, lifespan);
     fill(255, lifespan);
-    circle(center.x, center.y, 2*radius);
+    pushMatrix();
+    translate(center.x, center.y, center.z);
+    rotateX(radians(90));
+    shape(openCylinder);
+    popMatrix();
   }
   
   // Is the particle still useful? // Check if the lifetime is over. 

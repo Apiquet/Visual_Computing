@@ -2,7 +2,7 @@
 class ParticleSystem {
   ArrayList<Particle> particles;
   PVector origin;
-  float particleRadius = 10;
+  float particleRadius = 20;
   
   ParticleSystem(PVector origin) {
     this.origin = origin.copy();
@@ -20,7 +20,7 @@ class ParticleSystem {
       // Try to add an adjacent cylinder.
       float angle = random(TWO_PI);
       center.x += sin(angle) * 2*particleRadius;
-      center.y += cos(angle) * 2*particleRadius;
+      center.z += cos(angle) * 2*particleRadius;
       if(checkPosition(center)) {
         particles.add(new Particle(center, particleRadius));
         break; 
@@ -44,7 +44,7 @@ class ParticleSystem {
   // Check if a particle with center c1
   // and another particle with center c2 overlap. 
   boolean checkOverlap(PVector c1, PVector c2) {
-    float distance = dist(c1.x, 0, c1.y, c2.x, 0, c2.y);
+    float distance = dist(c1.x, c1.y, c1.z, c2.x, c2.y, c2.z);
     if (distance < 2*particleRadius) {
       return false;
     }

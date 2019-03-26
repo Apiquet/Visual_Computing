@@ -111,10 +111,6 @@ void draw()
     directionalLight(50, 100, 125, 0, -1, 0); 
     ambientLight(102, 102, 102);
     background(225);
-    if(particle_ON){
-      //ParticleSystem.addParticle();
-      //ParticleSystem.run();
-    }
     translate(width/2, height/2, 0);
     pushMatrix();
     rotateX(rx);
@@ -125,6 +121,10 @@ void draw()
       rotateX(radians(90));
       shape(openCylinder);
       popMatrix();
+    }
+    if(particle_ON){
+      ParticleSystem.addParticle();
+      ParticleSystem.run();
     }
     fill(220);
     box(box_size, 5, box_size);
@@ -226,11 +226,11 @@ void keyReleased(){
 
 void mouseClicked() {
   if(shiftIsPressed && mouseX < box_size + width/4 - 2*cylinderBaseSize && mouseY < box_size + height/4 - 2*cylinderBaseSize && mouseX > width/4 && mouseY > height/4) { 
-      if(clicks_shiftDisabled.size()>-1){
+      if(clicks_shiftDisabled.size()==0){
         clicks_shiftEnabled.add( new PVector( mouseX, mouseY, 0 ) );
         clicks_shiftDisabled.add( new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize) );
-        //particle_origin = new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize );
-        //ParticleSystem = new ParticleSystem(particle_origin);
+        particle_origin = new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize );
+        ParticleSystem = new ParticleSystem(particle_origin);
 
       }
   }

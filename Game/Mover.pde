@@ -65,6 +65,8 @@ class Mover {
       if (distance <= radiusCylinder+radiusSphere) {
         PVector n = new PVector(location.x - Cylinderlocations.get(i).x, 0, location.z - Cylinderlocations.get(i).z * -1).normalize();
         velocity.sub(n.mult(2*velocity.dot(n)));
+        clicks_shiftDisabled.remove(i);
+        ParticleSystem.particles.remove(i);
       }
     }
   }

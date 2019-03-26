@@ -23,6 +23,8 @@ class ParticleSystem {
       center.z += cos(angle) * 2*particleRadius;
       if(checkPosition(center)) {
         particles.add(new Particle(center, particleRadius));
+        clicks_shiftDisabled.add(new PVector( center.x, center.y, center.z));
+       
         break; 
       }
     } 
@@ -34,12 +36,13 @@ class ParticleSystem {
   // - is inside the board boundaries
   boolean checkPosition(PVector center) {
     
-    if(center.x < box_size + width/4 - 2*particleRadius && center.z < box_size + height/4 - 2*particleRadius && center.x > width/4 && center.z > height/4) { 
+    if(center.x < 100 ) { 
         for(int i=0; i < particles.size(); i++) {
           if (checkOverlap(center, particles.get(i).center) == false) {
             return false;
           }
         }
+        println(center.x + ", " + center.y + ", " + center.z);
         return true;
     }
     return false;

@@ -16,11 +16,12 @@ ArrayList<PVector> clicks_shiftDisabled = new ArrayList();
 boolean was_clicked = false;
 PShape openCylinder = new PShape();
 PVector particle_origin;
+boolean particle_ON = false;
 
 void settings()
 {
   size(500, 500, P3D);
-  particle_origin = new PVector(0,0,0);
+  //particle_origin = new PVector(0,0,0);
 }
 
 void setup() 
@@ -28,7 +29,6 @@ void setup()
   
   stroke(0);
   mover = new Mover();
-  ParticleSystem = new ParticleSystem(particle_origin);
 
 
   //text parameter
@@ -111,15 +111,17 @@ void draw()
     directionalLight(50, 100, 125, 0, -1, 0); 
     ambientLight(102, 102, 102);
     background(225);
-    ParticleSystem.addParticle();
-    ParticleSystem.run();
+    if(particle_ON){
+      //ParticleSystem.addParticle();
+      //ParticleSystem.run();
+    }
     translate(width/2, height/2, 0);
     pushMatrix();
     rotateX(rx);
     rotateZ(rz);
     for( int i = 0; i < clicks_shiftDisabled.size(); i++){
       pushMatrix();
-      translate(clicks_shiftDisabled.get(i).x, 0, clicks_shiftDisabled.get(i).y);
+      translate(clicks_shiftDisabled.get(i).x, 0, clicks_shiftDisabled.get(i).z);
       rotateX(radians(90));
       shape(openCylinder);
       popMatrix();
@@ -213,7 +215,10 @@ void mouseWheel(MouseEvent event)
 void keyReleased(){
   if (key==CODED){
     if (keyCode == SHIFT){
-      if(shiftIsPressed) shiftIsPressed = false;
+      if(shiftIsPressed){
+        shiftIsPressed = false;
+        particle_ON = true;
+      }
       else shiftIsPressed = true;
     }
   }
@@ -221,8 +226,12 @@ void keyReleased(){
 
 void mouseClicked() {
   if(shiftIsPressed && mouseX < box_size + width/4 - 2*cylinderBaseSize && mouseY < box_size + height/4 - 2*cylinderBaseSize && mouseX > width/4 && mouseY > height/4) { 
-    clicks_shiftEnabled.add( new PVector( mouseX, mouseY, millis() ) );
-    clicks_shiftDisabled.add( new PVector( mouseX- box_size + 2*cylinderBaseSize, mouseY - box_size + 2*cylinderBaseSize, millis() ) );
-    
+      if(clicks_shiftDisabled.size()>-1){
+        clicks_shiftEnabled.add( new PVector( mouseX, mouseY, 0 ) );
+        clicks_shiftDisabled.add( new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize) );
+        //particle_origin = new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize );
+        //ParticleSystem = new ParticleSystem(particle_origin);
+
+      }
   }
 }

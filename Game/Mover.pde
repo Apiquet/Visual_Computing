@@ -61,9 +61,9 @@ class Mover {
   
   void ckeckCylinderCollision(ArrayList<PVector> Cylinderlocations, float radiusSphere, float radiusCylinder) {
     for(int i=0; i < Cylinderlocations.size(); i++) {
-      float distance = dist(location.x, 0, location.z, Cylinderlocations.get(i).x, 0, Cylinderlocations.get(i).y * -1);
+      float distance = dist(location.x, 0, location.z, Cylinderlocations.get(i).x, 0, Cylinderlocations.get(i).z * -1);
       if (distance <= radiusCylinder+radiusSphere) {
-        PVector n = new PVector(location.x - Cylinderlocations.get(i).x, 0, location.z - Cylinderlocations.get(i).y * -1).normalize();
+        PVector n = new PVector(location.x - Cylinderlocations.get(i).x, 0, location.z - Cylinderlocations.get(i).z * -1).normalize();
         velocity.sub(n.mult(2*velocity.dot(n)));
       }
     }

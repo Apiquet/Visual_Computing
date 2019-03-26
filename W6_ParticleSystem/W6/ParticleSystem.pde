@@ -44,7 +44,7 @@ class ParticleSystem {
   // Check if a particle with center c1
   // and another particle with center c2 overlap. 
   boolean checkOverlap(PVector c1, PVector c2) {
-    float distance = dist(c1.x, 0, c1.y, c2.x, 0, c2.y);
+    float distance = dist(c1.x, c1.y, c1.z, c2.x, c2.y, c2.z);
     if (distance < 2*particleRadius) {
       return false;
     }

@@ -17,7 +17,7 @@ class Mover {
       gravityForce.x = sin(rotz) * gravityConstant;
       gravityForce.z = sin(rotx) * gravityConstant;
       float normalForce = 1;
-      float mu = 0.05;
+      float mu = 0.1;
       float frictionMagnitude = normalForce * mu;
       PVector friction = velocity.copy();
       friction.mult(-1);
@@ -61,12 +61,10 @@ class Mover {
   
   void ckeckCylinderCollision(ArrayList<PVector> Cylinderlocations, float radiusSphere, float radiusCylinder) {
     for(int i=0; i < Cylinderlocations.size(); i++) {
-      float distance = dist(location.x, location.y, location.z, Cylinderlocations.get(i).x, 0, Cylinderlocations.get(i).y * -1);
-      
-      println("Distance: " + distance);
+      float distance = dist(location.x, 0, location.z, Cylinderlocations.get(i).x, 0, Cylinderlocations.get(i).y * -1);
       if (distance < radiusCylinder+radiusSphere) {
-        PVector n = new PVector(location.x - Cylinderlocations.get(i).x,0,location.z - Cylinderlocations.get(i).y * -1);
-        velocity.sub(n.mult(2*(velocity.dot(n))));
+        PVector n = new PVector(location.x - Cylinderlocations.get(i).x, 0, location.z - Cylinderlocations.get(i).y * -1).normalize();
+        velocity.sub(n.mult(2*velocity.dot(n)));
       }
     }
   }

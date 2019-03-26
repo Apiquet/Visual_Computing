@@ -12,16 +12,38 @@ class ParticleSystem {
 
   void addParticle() {
     PVector center;
-    center = origin.copy();
-    float angle = random(TWO_PI);
-    float radius = random(min(width, height)/2);
-    center.x += sin(angle) * 2*radius;
-    center.y += cos(angle) * 2*radius;
-    particles.add(new Particle(center, particleRadius));
+    int numAttempts = 100;
+    for(int i=0; i<numAttempts; i++) {
+      // Pick a cylinder and its center.
+      int index = int(random(particles.size())); 
+      center = particles.get(index).center.copy();
+      // Try to add an adjacent cylinder.
+      float angle = random(TWO_PI);
+      center.x += sin(angle) * 2*particleRadius;
+      center.y += cos(angle) * 2*particleRadius;
+      if(checkPosition(center)) {
+        particles.add(new Particle(center, particleRadius));
+        break; 
+      }
+    } 
+  }
+  
+  // Check if a position is available, i.e.
+  // - would not overlap with particles that are already created 
+  // (for each particle, call checkOverlap())
+  // - is inside the board boundaries
+  boolean checkPosition(PVector center) {
+    // ...
   }
 
-// Iteratively update and display every particle,
-// and remove them from the list if their lifetime is over. 
+  // Check if a particle with center c1
+  // and another particle with center c2 overlap. 
+  boolean checkOverlap(PVector c1, PVector c2) {
+    // ...
+  }
+
+  // Iteratively update and display every particle,
+  // and remove them from the list if their lifetime is over. 
   void run() {
     for(int i=0; i < particles.size(); i++) {
       particles.get(i).update();

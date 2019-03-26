@@ -58,7 +58,6 @@ class Mover {
       location.z = -box_edge;
     }
   }
-  
   void ckeckCylinderCollision(ArrayList<PVector> Cylinderlocations, float radiusSphere, float radiusCylinder) {
     for(int i=0; i < Cylinderlocations.size(); i++) {
       float distance = dist(location.x, 0, location.z, Cylinderlocations.get(i).x, 0, Cylinderlocations.get(i).z * -1);

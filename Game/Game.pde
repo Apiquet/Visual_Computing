@@ -126,8 +126,11 @@ void draw()
     }
     if(clicks_shiftDisabled.size()>0){
       pushMatrix();
+      float ang = atan2(mover.location.x-robotnik_pos.x, mover.location.z-robotnik_pos.z);
       translate(robotnik_pos.x, 0, robotnik_pos.z);
       rotateX(radians(180));
+      //print(ang);
+      rotateY(ang);
       shape(robotnik, 0,0, 80, 80);
       popMatrix();
     }

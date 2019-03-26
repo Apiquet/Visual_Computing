@@ -46,7 +46,7 @@ class ParticleSystem {
             return false;
           }
         }
-        println(center.x + ", " + center.y + ", " + center.z);
+        //println(center.x + ", " + center.y + ", " + center.z);
         return true;
     }
     return false;

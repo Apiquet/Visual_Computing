@@ -120,9 +120,14 @@ void draw()
       pushMatrix();
       translate(clicks_shiftDisabled.get(i).x, 0, clicks_shiftDisabled.get(i).z);
       rotateX(radians(90));
-      shape(robotnik, 100, 100, 80, 80);
       shape(openCylinder);
-
+      popMatrix();
+    }
+    if(clicks_shiftDisabled.size()>0){
+      pushMatrix();
+      translate(clicks_shiftDisabled.get(0).x, 0, clicks_shiftDisabled.get(0).z);
+      rotateX(radians(90));
+      shape(robotnik, 100, 100, 80, 80);
       popMatrix();
     }
     if(particle_ON){

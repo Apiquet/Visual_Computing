@@ -2,8 +2,8 @@ ParticleSystem ParticleSystem;
 PVector origin;
 
 void settings() {
-  size(1000, 1000, P2D);
-  origin = new PVector(0,0,0);
+  size(500, 500, P3D);
+  origin = new PVector(width/2,height/2,0);
 }
 
 void setup () {

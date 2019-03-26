@@ -11,6 +11,8 @@ void setup () {
 }
 
 void draw() {
-  ParticleSystem.addParticle();
-  ParticleSystem.run();
+  if (frameCount % 10 == 0){
+    ParticleSystem.addParticle();
+    ParticleSystem.run();
+  }
 }

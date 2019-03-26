@@ -33,13 +33,22 @@ class ParticleSystem {
   // (for each particle, call checkOverlap())
   // - is inside the board boundaries
   boolean checkPosition(PVector center) {
-    // ...
+    for(int i=0; i < particles.size(); i++) {
+      if (checkOverlap(center, particles.get(i).center) == false) {
+        return false;
+      }
+    }
+    return true;
   }
 
   // Check if a particle with center c1
   // and another particle with center c2 overlap. 
   boolean checkOverlap(PVector c1, PVector c2) {
-    // ...
+    float distance = dist(c1.x, 0, c1.y, c2.x, 0, c2.y);
+    if (distance < 2*particleRadius) {
+      return false;
+    }
+    else return true;
   }
 
   // Iteratively update and display every particle,

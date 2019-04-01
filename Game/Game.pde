@@ -248,7 +248,7 @@ void keyReleased(){
 }
 
 void mouseClicked() {
-  if(shiftIsPressed && mouseX < box_size + width/4 - 2*cylinderBaseSize && mouseY < box_size + height/4 - 2*cylinderBaseSize && mouseX > width/4 && mouseY > height/4) { 
+  if(shiftIsPressed && mouseX < box_size + (width-box_size)/2 && mouseY < box_size + (height-box_size)/2 && mouseX > (width-box_size)/2 && mouseY > (height-box_size)/2) { 
       clicks_shiftDisabled.clear();
       clicks_shiftEnabled.clear();
       if(clicks_shiftDisabled.size()==0){

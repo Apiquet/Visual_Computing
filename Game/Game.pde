@@ -146,7 +146,6 @@ void draw()
       if(frameCount % 20 == 0){
         ParticleSystem.addParticle();
       }
-      ParticleSystem.addParticle();
       ParticleSystem.run();
     }
     fill(220);

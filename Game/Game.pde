@@ -8,17 +8,18 @@ PFont f;
 PShape globe;
 float rayon = 10;
 boolean shiftIsPressed = false;
+boolean user_won = false;
 float cylinderBaseSize = 10;
 float cylinderHeight = 20;
 int cylinderResolution = 40;
 ArrayList<PVector> clicks_shiftEnabled = new ArrayList();
-PVector robotnik_pos;
 ArrayList<PVector> clicks_shiftDisabled = new ArrayList();
 boolean was_clicked = false;
 PShape openCylinder = new PShape();
 PVector particle_origin;
 boolean particle_ON = false;
 PShape robotnik;
+String text_displayed = " ";
 void settings()
 {
   size(500, 500, P3D);
@@ -108,6 +109,13 @@ void draw()
     translate(mouseX, mouseY, 0);
     shape(openCylinder);
     popMatrix();
+    // text parameters
+    fill(0, 204, 102);
+    textFont(f); 
+    textSize(30);
+    if(user_won) text_displayed = "You hit Robotnik! You won!";
+    else text_displayed = " ";
+    text(text_displayed, 70, 10, 0);
   }else{
     camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
     directionalLight(50, 100, 125, 0, -1, 0); 
@@ -126,8 +134,8 @@ void draw()
     }
     if(clicks_shiftDisabled.size()>0){
       pushMatrix();
-      float ang = atan2(mover.location.x-robotnik_pos.x, mover.location.z-robotnik_pos.z);
-      translate(robotnik_pos.x, 0, robotnik_pos.z);
+      float ang = atan2(mover.location.x-clicks_shiftDisabled.get(0).x, mover.location.z-clicks_shiftDisabled.get(0).z);
+      translate(clicks_shiftDisabled.get(0).x, 0, clicks_shiftDisabled.get(0).z);
       rotateX(radians(180));
       //print(ang);
       rotateY(ang);
@@ -151,7 +159,8 @@ void draw()
     fill(0);
     textFont(f); 
     textSize(8);
-    text("RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed),-110,-100,depth-200);
+    text_displayed = "RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed);
+    text(text_displayed,-110,-100,depth-200);
   }
   
 }
@@ -231,6 +240,7 @@ void keyReleased(){
     if (keyCode == SHIFT){
       if(shiftIsPressed){
         shiftIsPressed = false;
+        user_won = false;
       }
       else shiftIsPressed = true;
     }
@@ -244,7 +254,6 @@ void mouseClicked() {
       if(clicks_shiftDisabled.size()==0){
         clicks_shiftEnabled.add( new PVector( mouseX, mouseY, 0 ) );
         clicks_shiftDisabled.add( new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize) );
-        robotnik_pos = new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize);
         particle_origin = new PVector( mouseX- box_size + 2*cylinderBaseSize, 0, mouseY - box_size + 2*cylinderBaseSize );
         ParticleSystem = new ParticleSystem(particle_origin);
         particle_ON = true;

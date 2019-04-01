@@ -38,16 +38,17 @@ class ParticleSystem {
   // (for each particle, call checkOverlap())
   // - is inside the board boundaries
   boolean checkPosition(PVector center) {
-    
-    if(center.x < 100 ) { 
-        for(int i=0; i < particles.size(); i++) {
-          if (checkOverlap(center, particles.get(i).center) == false) {
-            return false;
-          }
-        }
-        //println(center.x + ", " + center.y + ", " + center.z);
-        return true;
+   for(int i=0; i < particles.size(); i++) {
+      if (checkOverlap(center, particles.get(i).center) == false) {
+        return false;
+      }
     }
+    float realX = center.x + width/2;
+    float realZ = center.z + height/2;
+    if(realX < box_size + (width-box_size)/2 && realZ < box_size + (height-box_size)/2 && realX > (width-box_size)/2 && realZ > (height-box_size)/2){
+      return true;
+    }      
+    
     return false;
   }
 

@@ -146,6 +146,7 @@ void draw()
       if(frameCount % 20 == 0){
         ParticleSystem.addParticle();
       }
+      ParticleSystem.addParticle();
       ParticleSystem.run();
     }
     fill(220);
@@ -254,7 +255,7 @@ void mouseClicked() {
       if(clicks_shiftDisabled.size()==0){
         clicks_shiftEnabled.add( new PVector( mouseX, mouseY, 0 ) );
         clicks_shiftDisabled.add( new PVector( mouseX - box_size + 5*cylinderBaseSize, 0, mouseY - box_size + 5*cylinderBaseSize) );
-        particle_origin = new PVector( mouseX- box_size + 5*cylinderBaseSize, 0, mouseY - box_size + 5*cylinderBaseSize );
+        particle_origin = new PVector( mouseX - box_size + 5*cylinderBaseSize, 0, mouseY - box_size + 5*cylinderBaseSize );
         ParticleSystem = new ParticleSystem(particle_origin);
         particle_ON = true;
       }

@@ -96,7 +96,7 @@ void draw()
     translate(width/2, height/2, 0);
     rotateX(radians(90));
     rotateZ(0);
-    fill(220);
+    fill(200,100,0,50);
     box(box_size, 5, box_size);
     popMatrix();
     for( int i = 0; i < clicks_shiftEnabled.size(); i++){
@@ -148,8 +148,13 @@ void draw()
       }
       ParticleSystem.run();
     }
-    fill(220);
+    fill(200,100,0,50); // semi-transparent
     box(box_size, 5, box_size);
+    hint(DISABLE_DEPTH_TEST);
+    noFill();
+    stroke(10);
+    box(box_size, 5, box_size);
+    //rotateY(radians(90));
     mover.update(rx, rz);
     mover.checkEdges(box_size/2);
     mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize);

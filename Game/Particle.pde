@@ -30,12 +30,4 @@ class Particle {
     shape(openCylinder);
     popMatrix();
   }
-  
-  // Is the particle still useful? // Check if the lifetime is over. 
-  boolean isDead() {
-    if(lifespan <= 0) {
-      return true;
-    }
-    else return false;
-  } 
 }

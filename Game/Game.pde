@@ -1,3 +1,6 @@
+/*
+  Global Variables
+*/
 Mover mover;
 ParticleSystem ParticleSystem;
 float dx, dy, rx, rz, depth = 500, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20;
@@ -39,6 +42,9 @@ void draw(){
     } 
 }
 
+/*
+  Drawing scene in SHIFT ON mode: top view of the board where user can click to set robotnik position
+*/
 void updating_scene_shiftON(){
   
     setting_scene_and_background();
@@ -57,6 +63,9 @@ void updating_scene_shiftON(){
     displaying_text();  
 }
 
+/*
+  Drawing scene in game mode (SHIFT released): the user can rotate the plate to move the ball
+*/
 void updating_scene_shiftOFF(){
   
     setting_scene_and_background();
@@ -79,6 +88,10 @@ void updating_scene_shiftOFF(){
     popMatrix();
     displaying_text(); 
 }
+
+/*
+  displaying robotnik at the good position
+*/
 void displaying_robotnik(){
   
     pushMatrix();
@@ -96,6 +109,9 @@ void displaying_robotnik(){
     popMatrix();
 }
 
+/*
+  Displaying the cylinder at the clicked position
+*/
 void displaying_cylinder_shiftON(){
   
     pushMatrix();
@@ -104,6 +120,9 @@ void displaying_cylinder_shiftON(){
     popMatrix();  
 }
 
+/*
+  Creating a plate with tranparency to allow user to continuously see the ball
+*/
 void creating_plate(){
   
     fill(200,100,0,50); // semi-transparent
@@ -114,6 +133,9 @@ void creating_plate(){
     box(box_size, 5, box_size);
 }
 
+/*
+  Setting scene and background
+*/
 void setting_scene_and_background(){
   
     camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
@@ -122,6 +144,9 @@ void setting_scene_and_background(){
     background(225);
 }
 
+/*
+  Dislaying text in SHIFT ON mode and game mode, it also display a message when user won.
+*/
 void displaying_text(){
   
     fill(0);
@@ -145,6 +170,9 @@ void displaying_text(){
     } 
 }
 
+/*
+  Changing color when user clicks
+*/
 void mousePressed(){
     stroke(255);
 }
@@ -153,6 +181,9 @@ void mouseReleased(){
     stroke(0);
 }
 
+/*
+  Rotating plate when mouse is dragged
+*/
 void mouseDragged() {
   
     dx += mouseX - pmouseX;
@@ -169,6 +200,9 @@ void mouseDragged() {
       rx = radians(-60);
 }
 
+/*
+  Setting zoom from arrows and setting SHIFT ON mode from SHIFT key
+*/
 void keyPressed(){
   
     float delta = 10;
@@ -188,6 +222,9 @@ void keyPressed(){
     }
 }
 
+/*
+  Changing speed from mouse wheel
+*/
 void mouseWheel(MouseEvent event){
   
     speed += float(event.getCount())*0.1;
@@ -195,6 +232,9 @@ void mouseWheel(MouseEvent event){
     else if(speed > 3) speed = 3;
 }
 
+/*
+  Setting game mode when SHIFT key is released
+*/
 void keyReleased(){
   
     if (key==CODED){
@@ -205,6 +245,9 @@ void keyReleased(){
     }
 }
 
+/*
+  Let user setting robotnik position
+*/
 void mouseClicked(){
   
     if(shiftIsPressed && mouseX < box_size + (width-box_size)/2 && mouseY < box_size + (height-box_size)/2 && mouseX > (width-box_size)/2 && mouseY > (height-box_size)/2) { 
@@ -220,6 +263,9 @@ void mouseClicked(){
     }
 }
 
+/*
+  Creating cylinder
+*/
 void creating_cylinder(){
   
     float angle;

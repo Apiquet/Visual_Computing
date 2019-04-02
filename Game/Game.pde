@@ -220,6 +220,8 @@ void keyPressed()
 void mouseWheel(MouseEvent event)
 {
   speed += float(event.getCount())*0.1;
+  if(speed<0.1) speed = 0.1;
+  else if(speed > 3) speed = 3;
 }
 
 void keyReleased(){

@@ -182,6 +182,9 @@ void keyPressed(){
       {
         depth-=delta;
       }
+      if (keyCode == SHIFT){
+        shiftIsPressed = true;
+      }
     }
 }
 
@@ -196,11 +199,8 @@ void keyReleased(){
   
     if (key==CODED){
       if (keyCode == SHIFT){
-        if(shiftIsPressed){
           shiftIsPressed = false;
           user_won = false;
-        }
-        else shiftIsPressed = true;
       }
     }
 }

@@ -199,48 +199,23 @@ void mouseDragged() {
 
 void keyPressed()
 {
+  float delta = 10;
   if (key == CODED)
   {
     if (keyCode == UP)
     {
-      if (speed < 2)
-      {
-        speed += 0.1;
-      } 
-      else 
-      {
-        speed = 2;
-      }
+      depth+=delta;
     }
     else if (keyCode == DOWN)
     {
-      if (speed > 0.2)
-      {
-        speed -= 0.1;
-      } 
-      else 
-      {
-        speed = 0.2;
-      }
+      depth-=delta;
     }
   }
 }
 
 void mouseWheel(MouseEvent event)
 {
-  float e = event.getCount();
-  if(depth + e < 150)
-  {
-    depth = 150;
-  } 
-  else if(depth + e > 400)
-  {
-    depth = 500;
-  } 
-  else
-  {
-    depth += e;
-  }
+  speed += float(event.getCount())*0.1;
 }
 
 void keyReleased(){

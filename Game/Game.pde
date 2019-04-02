@@ -94,11 +94,7 @@ void draw()
   
 }
 void updating_scene_shiftON(){
-  
-    camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
-    directionalLight(50, 100, 125, 0, -1, 0); 
-    ambientLight(102, 102, 102);
-    background(225);
+    setting_scene_and_background();
     pushMatrix();
     translate(width/2, height/2, 0);
     rotateX(radians(90));
@@ -106,25 +102,16 @@ void updating_scene_shiftON(){
     fill(200,100,0,50);
     box(box_size, 5, box_size);
     popMatrix();
-    for( int i = 0; i < clicks_shiftEnabled.size(); i++){
-      pushMatrix();
-      translate(clicks_shiftEnabled.get(i).x, clicks_shiftEnabled.get(i).y, 0);
-      shape(openCylinder);
-      popMatrix();
-    }
+    if(clicks_shiftEnabled.size()>0) displaying_cylinder_shiftON();
     pushMatrix();
     translate(mouseX, mouseY, 0);
     shape(openCylinder);
     popMatrix();
-    displaying_text();
-  
+    displaying_text();  
 }
 
 void updating_scene_shiftOFF(){
-  camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
-    directionalLight(50, 100, 125, 0, -1, 0); 
-    ambientLight(102, 102, 102);
-    background(225);
+    setting_scene_and_background();
     translate(width/2, height/2, 0);
     pushMatrix();
     rotateX(rx);
@@ -152,13 +139,7 @@ void updating_scene_shiftOFF(){
       }
       ParticleSystem.run();
     }
-    fill(200,100,0,50); // semi-transparent
-    box(box_size, 5, box_size);
-    hint(DISABLE_DEPTH_TEST);
-    noFill();
-    stroke(10);
-    box(box_size, 5, box_size);
-    //rotateY(radians(90));
+    creating_plate();
     mover.update(rx, rz);
     mover.checkEdges(box_size/2);
     mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize);
@@ -167,9 +148,30 @@ void updating_scene_shiftOFF(){
     displaying_text();
   
 }
+void displaying_cylinder_shiftON(){
+  pushMatrix();
+  translate(clicks_shiftEnabled.get(0).x, clicks_shiftEnabled.get(0).y, 0);
+  shape(openCylinder);
+  popMatrix();  
+}
+void creating_plate(){
+  fill(200,100,0,50); // semi-transparent
+  box(box_size, 5, box_size);
+  hint(DISABLE_DEPTH_TEST);
+  noFill();
+  stroke(10);
+  box(box_size, 5, box_size);
+}
+void setting_scene_and_background(){
+  camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
+  directionalLight(50, 100, 125, 0, -1, 0); 
+  ambientLight(102, 102, 102);
+  background(225);
+  
+}
 
 void displaying_text(){
-    
+  
   fill(0);
   textFont(f);
   if(shiftIsPressed){
@@ -188,9 +190,9 @@ void displaying_text(){
     textSize(8);
     text_displayed = "RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed);
     text(text_displayed,-110,-100,depth-200); 
-  }
-  
+  } 
 }
+
 void mousePressed() {
   stroke(255);
 }

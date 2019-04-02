@@ -90,8 +90,7 @@ void draw()
     updating_scene_shiftON();
   }else{
     updating_scene_shiftOFF();
-  }
-  
+  } 
 }
 void updating_scene_shiftON(){
     setting_scene_and_background();
@@ -116,23 +115,7 @@ void updating_scene_shiftOFF(){
     pushMatrix();
     rotateX(rx);
     rotateZ(rz);
-    for( int i = 0; i < clicks_shiftDisabled.size(); i++){
-      pushMatrix();
-      translate(clicks_shiftDisabled.get(i).x, 0, clicks_shiftDisabled.get(i).z);
-      rotateX(radians(90));
-      shape(openCylinder);
-      popMatrix();
-    }
-    if(clicks_shiftDisabled.size()>0){
-      pushMatrix();
-      float ang = atan2(mover.location.x-clicks_shiftDisabled.get(0).x, mover.location.z-clicks_shiftDisabled.get(0).z);
-      translate(clicks_shiftDisabled.get(0).x, 0, clicks_shiftDisabled.get(0).z);
-      rotateX(radians(180));
-      //print(ang);
-      rotateY(ang);
-      shape(robotnik, 0,0, 80, 80);
-      popMatrix();
-    }
+    if(clicks_shiftDisabled.size()>0) displaying_robotnik();
     if(particle_ON){
       if(frameCount % 20 == 0){
         ParticleSystem.addParticle();
@@ -145,8 +128,21 @@ void updating_scene_shiftOFF(){
     mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize);
     mover.display(rayon);
     popMatrix();
-    displaying_text();
-  
+    displaying_text(); 
+}
+void displaying_robotnik(){
+  pushMatrix();
+  translate(clicks_shiftDisabled.get(0).x, 0, clicks_shiftDisabled.get(0).z);
+  rotateX(radians(90));
+  shape(openCylinder);
+  popMatrix();
+  pushMatrix();
+  float ang = atan2(mover.location.x-clicks_shiftDisabled.get(0).x, mover.location.z-clicks_shiftDisabled.get(0).z);
+  translate(clicks_shiftDisabled.get(0).x, 0, clicks_shiftDisabled.get(0).z);
+  rotateX(radians(180));
+  rotateY(ang);
+  shape(robotnik, 0,0, 80, 80);
+  popMatrix();
 }
 void displaying_cylinder_shiftON(){
   pushMatrix();

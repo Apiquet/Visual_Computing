@@ -1,16 +1,22 @@
+float angleX = 0;
+float angleY = 0;
+
 void settings() {
 size(1000, 1000, P2D);
 }
 void setup () {
 }
 void draw() {
+  camera(width/2, height/2, 500, 250, 250, 0, 0, 1, 0);
   background(255, 255, 255);
   My3DPoint eye = new My3DPoint(0, 0, -5000);
   My3DPoint origin = new My3DPoint(0, 0, 0);
   My3DBox input3DBox = new My3DBox(origin, 100, 150, 300);
   //rotated around x
-  float[][] transform1 = rotateXMatrix(-PI/8);
-  input3DBox = transformBox(input3DBox, transform1);
+  float[][] transformX = rotateXMatrix(radians(angleX) + -PI/8);
+  float [][] transformY = rotateYMatrix(radians(angleY));
+  input3DBox = transformBox(input3DBox, transformX);
+  input3DBox = transformBox(input3DBox, transformY);
   projectBox(eye, input3DBox).render();
   //rotated and translated
   float[][] transform2 = translationMatrix(200, 200, 0);
@@ -20,6 +26,7 @@ void draw() {
   float[][] transform3 = scaleMatrix(2, 2, 2);
   input3DBox = transformBox(input3DBox, transform3);
   projectBox(eye, input3DBox).render();
+
 }
 class My2DPoint {
 float x;
@@ -161,4 +168,27 @@ My3DBox transformBox(My3DBox box, float[][] transformMatrix) {
 My3DPoint euclidian3DPoint (float[] a) {
 My3DPoint result = new My3DPoint(a[0]/a[3], a[1]/a[3], a[2]/a[3]);
 return result;
+}
+
+void keyPressed()
+{
+  if (key == CODED)
+  {
+    if (keyCode == UP)
+    {  
+      angleX += 10;
+    }
+    else if (keyCode == DOWN)
+    {
+       angleX += -10;
+    }
+    else if (keyCode == RIGHT)
+    {
+       angleY += +10;
+    }
+    else if (keyCode == LEFT)
+    {
+       angleY += -10;
+    }
+  }
 }

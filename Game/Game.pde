@@ -1,24 +1,12 @@
 Mover mover;
 ParticleSystem ParticleSystem;
-float dx, dy, rx, rz;
-float depth = 500;
-float speed = 1.0;
-float box_size = 300;
-PFont f;
-PShape globe;
-float rayon = 10;
-boolean shiftIsPressed = false;
-boolean user_won = false;
-float cylinderBaseSize = 10;
-float cylinderHeight = 20;
+float dx, dy, rx, rz, depth = 500, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20;
+boolean shiftIsPressed = false, user_won = false, was_clicked = false, particle_ON = false;
 int cylinderResolution = 40;
-ArrayList<PVector> clicks_shiftEnabled = new ArrayList();
-ArrayList<PVector> clicks_shiftDisabled = new ArrayList();
-boolean was_clicked = false;
-PShape openCylinder = new PShape();
-PVector particle_origin;
-boolean particle_ON = false;
-PShape robotnik;
+ArrayList<PVector> clicks_shiftEnabled = new ArrayList(), clicks_shiftDisabled = new ArrayList();
+PShape globe, robotnik, openCylinder = new PShape();
+PVector particle_origin;  
+PFont f;
 String text_displayed = " ";
 
 void settings(){
@@ -103,7 +91,8 @@ void displaying_robotnik(){
   translate(clicks_shiftDisabled.get(0).x, 0, clicks_shiftDisabled.get(0).z);
   rotateX(radians(180));
   rotateY(ang);
-  shape(robotnik, 0,0, 80, 80);
+  scale(50);
+  shape(robotnik, 0,0);
   popMatrix();
 }
 

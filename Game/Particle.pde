@@ -22,9 +22,9 @@ class Particle {
   
   // Method to display
   void display() {
+    pushMatrix();
     stroke(255, lifespan);
     fill(255, lifespan);
-    pushMatrix();
     translate(center.x, center.y, center.z);
     rotateX(radians(90));
     shape(openCylinder);

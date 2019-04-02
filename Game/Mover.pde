@@ -63,9 +63,6 @@ class Mover {
       float distance = dist(location.x, 0, location.z, Cylinderlocations.get(i).x, 0, Cylinderlocations.get(i).z * -1);
       if (distance <= radiusCylinder+radiusSphere) {
         if(i==0){
-          shiftIsPressed = true;
-          clicks_shiftDisabled.clear();
-          clicks_shiftEnabled.clear();
           user_won = true;
           particle_ON = false;
           return;

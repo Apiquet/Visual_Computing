@@ -87,6 +87,14 @@ void setup()
 void draw() 
 {
   if (shiftIsPressed) {
+    updating_scene_shiftON();
+  }else{
+    updating_scene_shiftOFF();
+  }
+  
+}
+void updating_scene_shiftON(){
+  
     camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
     directionalLight(50, 100, 125, 0, -1, 0); 
     ambientLight(102, 102, 102);
@@ -108,23 +116,12 @@ void draw()
     translate(mouseX, mouseY, 0);
     shape(openCylinder);
     popMatrix();
-    // text parameters
-    fill(0);
-    textSize(19);
-    text_displayed = "RotationX: 90; RotationZ: 0; Speed: "+ String.format("%.2f", speed);
-    text(text_displayed,-28,0,0);
-    fill(0, 204, 102);
-    textFont(f); 
-    textSize(30);
-    if(user_won) text_displayed = "You hit Robotnik! You won!";
-    else text_displayed = " ";
-    text(text_displayed, 70, 10, 0);
-    fill(255, 204, 102);
-    textFont(f); 
-    textSize(20);
-    text("SHIFT_ON", 430, 430, 0);
-  }else{
-    camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
+    displaying_text();
+  
+}
+
+void updating_scene_shiftOFF(){
+  camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
     directionalLight(50, 100, 125, 0, -1, 0); 
     ambientLight(102, 102, 102);
     background(225);
@@ -167,16 +164,33 @@ void draw()
     mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize);
     mover.display(rayon);
     popMatrix();
-    // text parameters
-    fill(0);
-    textFont(f); 
-    textSize(8);
-    text_displayed = "RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed);
-    text(text_displayed,-110,-100,depth-200);
-  }
+    displaying_text();
   
 }
 
+void displaying_text(){
+    
+  fill(0);
+  textFont(f);
+  if(shiftIsPressed){
+    if(user_won){
+      textSize(30);
+      fill(0, 204, 102);
+      text("You hit Robotnik! You won!", 70, 50, 0);
+      fill(0);
+    }
+    textSize(19);
+    text_displayed = "RotationX: 90; RotationZ: 0; Speed: "+ String.format("%.2f", speed);
+    text(text_displayed,-28,0,0);
+    textSize(20);
+    text("SHIFT_ON", 430, 430, 0);
+  }else{ 
+    textSize(8);
+    text_displayed = "RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed);
+    text(text_displayed,-110,-100,depth-200); 
+  }
+  
+}
 void mousePressed() {
   stroke(255);
 }

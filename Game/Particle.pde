@@ -15,7 +15,7 @@ class Particle {
     display();
   }
   
-  // Method to update the particle's remaining lifetime
+  // Method to update the particle's remaining lifetime (does nothing)
   void update() {
     //lifespan -= 1;
   }

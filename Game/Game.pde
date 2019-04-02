@@ -12,11 +12,11 @@ PVector particle_origin;
 PFont f;
 String text_displayed = " ";
 
-void settings(){
+void settings() {
   size(500, 500, P3D);
 }
 
-void setup(){
+void setup() {
 
   stroke(0);
   mover = new Mover();
@@ -34,17 +34,16 @@ void setup(){
 }
 
 void draw(){
-  if (shiftIsPressed) {
+  if (shiftIsPressed)
     updating_scene_shiftON();
-  }else{
+  else
     updating_scene_shiftOFF();
-  } 
 }
 
 /*
 Drawing scene in SHIFT ON mode: top view of the board where user can click to set robotnik position
 */
-void updating_scene_shiftON(){
+void updating_scene_shiftON() {
 
   setting_scene_and_background();
   pushMatrix();
@@ -56,7 +55,8 @@ void updating_scene_shiftON(){
   popMatrix();
   //if the user clicked on the plate, we add his click on the clicks_shiftEnabled object with x and y position, we then display the cylinder
   //if the user then click on another postion, we replace x and y 
-  if(clicks_shiftEnabled.size()>0) displaying_cylinder_shiftON();
+  if(clicks_shiftEnabled.size()>0) 
+    displaying_cylinder_shiftON();
   pushMatrix();
   //displaying a cylinder on the mouse position
   translate(mouseX, mouseY, 0);
@@ -69,7 +69,7 @@ void updating_scene_shiftON(){
 /*
 Drawing scene in game mode (SHIFT released): the user can rotate the plate to move the ball
 */
-void updating_scene_shiftOFF(){
+void updating_scene_shiftOFF() {
 
   setting_scene_and_background();
   translate(width/2, height/2, 0);
@@ -77,10 +77,11 @@ void updating_scene_shiftOFF(){
   rotateX(rx);
   rotateZ(rz);
   //if the user clicked on the plate in SHIFT ON mode, we draw Robotnik at the corresponding position
-  if(clicks_shiftEnabled.size()>0) displaying_robotnik();
+  if(clicks_shiftEnabled.size()>0) 
+    displaying_robotnik();
   //if the user clicked on the plate in SHIFT ON mode, we start to add particles
-  if(particle_ON){
-    if(frameCount % 20 == 0 && !user_won){
+  if(particle_ON) {
+    if(frameCount % 20 == 0 && !user_won) {
       ParticleSystem.addParticle();
     }
     ParticleSystem.run();
@@ -99,7 +100,7 @@ void updating_scene_shiftOFF(){
 /*
 Displaying robotnik at the good position
 */
-void displaying_robotnik(){
+void displaying_robotnik() {
 
   pushMatrix();
   translate(particle_origin.x, 0, particle_origin.z);
@@ -120,7 +121,7 @@ void displaying_robotnik(){
 /*
 Displaying the cylinder at the clicked position
 */
-  void displaying_cylinder_shiftON(){
+  void displaying_cylinder_shiftON() {
   
   pushMatrix();
   translate(clicks_shiftEnabled.get(0).x, clicks_shiftEnabled.get(0).y, 0);
@@ -131,7 +132,7 @@ Displaying the cylinder at the clicked position
 /*
 Creating a plate with tranparency to allow user to continuously see the ball
 */
-void creating_plate(){
+void creating_plate() {
 
   fill(200,100,0,50); // semi-transparent
   box(box_size, 5, box_size);
@@ -144,7 +145,7 @@ void creating_plate(){
 /*
 Setting scene and background
 */
-void setting_scene_and_background(){
+void setting_scene_and_background() {
 
   camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
   directionalLight(50, 100, 125, 0, -1, 0); 
@@ -155,22 +156,22 @@ void setting_scene_and_background(){
 /*
 Dislaying text in SHIFT ON mode and game mode, it also display a message when user won.
 */
-void displaying_text(){
+void displaying_text() {
 
   fill(0);
   textFont(f);
-  if(shiftIsPressed){
+  if(shiftIsPressed) {
     textSize(19);
     text_displayed = "RotationX: 90; RotationZ: 0; Speed: "+ String.format("%.2f", speed);
     text(text_displayed,-28,0,0);
     textSize(20);
     text("SHIFT_ON", 430, 430, 0);
-  }else{ 
+  } else { 
     textSize(8);
     text_displayed = "RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed);
     text(text_displayed,-110,-100,depth-200); 
     //if user won we display a message
-    if(user_won){
+    if(user_won) {
       textSize(15);
       fill(0, 204, 102);
       text("You hit Robotnik! You won!",-90,-65,depth-200); 
@@ -185,11 +186,11 @@ void displaying_text(){
 /*
 Changing color when user clicks
 */
-void mousePressed(){
+void mousePressed() {
   stroke(255);
 }
 
-void mouseReleased(){
+void mouseReleased() {
   stroke(0);
 }
 
@@ -215,20 +216,17 @@ void mouseDragged() {
 /*
 Setting zoom from arrows and setting SHIFT ON mode from SHIFT key
 */
-void keyPressed(){
+void keyPressed() {
 
   float delta = 10;
-  if (key == CODED)
-  {
-    if (keyCode == UP)
-    {
+  if (key == CODED) {
+    if (keyCode == UP) {
       depth+=delta;
     }
-    else if (keyCode == DOWN)
-    {
+    else if (keyCode == DOWN) {
       depth-=delta;
     }
-    if (keyCode == SHIFT){
+    if (keyCode == SHIFT) {
       user_won = false;
       shiftIsPressed = true;
     }
@@ -238,20 +236,22 @@ void keyPressed(){
 /*
 Changing speed from mouse wheel
 */
-void mouseWheel(MouseEvent event){
+void mouseWheel(MouseEvent event) {
 
   speed += float(event.getCount())*0.1;
-  if(speed<0.1) speed = 0.1;
-  else if(speed > 3) speed = 3;
+  if(speed<0.1) 
+    speed = 0.1;
+  else if(speed > 3) 
+    speed = 3;
 }
 
 /*
 Setting game mode when SHIFT key is released
 */
-void keyReleased(){
+void keyReleased() {
 
-  if (key==CODED){
-    if (keyCode == SHIFT){
+  if (key==CODED) {
+    if (keyCode == SHIFT) {
         shiftIsPressed = false;
     }
   }
@@ -260,34 +260,34 @@ void keyReleased(){
 /*
 Let user setting robotnik position
 */
-void mouseClicked(){
+void mouseClicked() {
   //verifying the user clicked on the plate
   if(shiftIsPressed && mouseX < box_size + (width-box_size)/2 && mouseY < box_size + (height-box_size)/2 && mouseX > (width-box_size)/2 && mouseY > (height-box_size)/2) { 
-      //clear the ArrayLists to add new position for Robotnik
-      clicks_shiftDisabled.clear();
-      clicks_shiftEnabled.clear();
-      if(clicks_shiftDisabled.size()==0){
-        //adding position of cylinder in SHIFT ON mode and in game mode
-        clicks_shiftEnabled.add( new PVector( mouseX, mouseY, 0 ) );
-        particle_origin = new PVector( mouseX - box_size + 5*cylinderBaseSize, 0, mouseY - box_size + 5*cylinderBaseSize );
-        clicks_shiftDisabled.add(particle_origin);
-        ParticleSystem = new ParticleSystem(particle_origin);
-        particle_ON = true;
-      }
+    //clear the ArrayLists to add new position for Robotnik
+    clicks_shiftDisabled.clear();
+    clicks_shiftEnabled.clear();
+    if(clicks_shiftDisabled.size()==0) {
+      //adding position of cylinder in SHIFT ON mode and in game mode
+      clicks_shiftEnabled.add( new PVector( mouseX, mouseY, 0 ) );
+      particle_origin = new PVector( mouseX - box_size + 5*cylinderBaseSize, 0, mouseY - box_size + 5*cylinderBaseSize );
+      clicks_shiftDisabled.add(particle_origin);
+      ParticleSystem = new ParticleSystem(particle_origin);
+      particle_ON = true;
+    }
   }
 }
 
 /*
 Creating cylinder
 */
-void creating_cylinder(){
+void creating_cylinder() {
 
   float angle;
   float[] x = new float[cylinderResolution+1];
   float[] y = new float[cylinderResolution+1];
  
   //get the x and z position on a circle for all the cylinderResolution
-  for(int i=0; i < x.length; i++){
+  for(int i=0; i < x.length; i++) {
     angle = TWO_PI / (cylinderResolution) * i;
     x[i] = sin(angle) * cylinderBaseSize;
     y[i] = cos(angle) * cylinderBaseSize;
@@ -298,14 +298,14 @@ void creating_cylinder(){
   //draw the cylinderBaseSize of the cylinder
   openCylinder.beginShape(TRIANGLE_FAN);
     openCylinder.vertex(0, 0, 0);
-    for(int i=0; i < x.length; i++){
+    for(int i=0; i < x.length; i++) {
       openCylinder.vertex(x[i], y[i], 0);
     }
   openCylinder.endShape();
  
   //draw the center of the cylinder
   openCylinder.beginShape(QUAD_STRIP); 
-    for(int i=0; i < x.length; i++){
+    for(int i=0; i < x.length; i++) {
       openCylinder.vertex(x[i], y[i], 0);
       openCylinder.vertex(x[i], y[i], cylinderHeight);
     }
@@ -314,7 +314,7 @@ void creating_cylinder(){
   //draw the cylinderBaseSize of the cylinder
   openCylinder.beginShape(TRIANGLE_FAN); 
     openCylinder.vertex(0, 0, 0);
-    for(int i=0; i < x.length; i++){
+    for(int i=0; i < x.length; i++) {
       openCylinder.vertex(x[i], y[i], cylinderHeight);
     }
   openCylinder.endShape();

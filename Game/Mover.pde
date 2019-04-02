@@ -1,3 +1,4 @@
+// A simple Mover class
 class Mover {
 
   PVector location;
@@ -12,6 +13,7 @@ class Mover {
     velocity = new PVector(0,0,0);
   }
   
+  // Method to update location according to the velocity
   void update(float rotx, float rotz)
   {
       gravityForce.x = sin(rotz) * gravityConstant;
@@ -28,6 +30,7 @@ class Mover {
       location.add(velocity);
   }
 
+  // Method to drow the mover at the correct location
   void display(float rayon)
   {
      translate(location.x,-12,-location.z);
@@ -38,6 +41,7 @@ class Mover {
      popMatrix();
   }
 
+  // Method for collision with box edges
   void checkEdges(float box_edge) 
   {
     if ((location.x >= box_edge))
@@ -58,6 +62,8 @@ class Mover {
       location.z = -box_edge;
     }
   }
+  
+  // Method for collision with cylinders
   void ckeckCylinderCollision(ArrayList<PVector> Cylinderlocations, float radiusSphere, float radiusCylinder) {
     for(int i=0; i < Cylinderlocations.size(); i++) {
       float distance = dist(location.x, 0, location.z, Cylinderlocations.get(i).x, 0, Cylinderlocations.get(i).z * -1);

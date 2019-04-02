@@ -109,6 +109,10 @@ void draw()
     shape(openCylinder);
     popMatrix();
     // text parameters
+    fill(0);
+    textSize(19);
+    text_displayed = "RotationX: 90; RotationZ: 0; Speed: "+ String.format("%.2f", speed);
+    text(text_displayed,-28,0,0);
     fill(0, 204, 102);
     textFont(f); 
     textSize(30);

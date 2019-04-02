@@ -23,7 +23,6 @@ String text_displayed = " ";
 void settings()
 {
   size(500, 500, P3D);
-  //particle_origin = new PVector(0,0,0);
 }
 
 void setup() 
@@ -116,6 +115,10 @@ void draw()
     if(user_won) text_displayed = "You hit Robotnik! You won!";
     else text_displayed = " ";
     text(text_displayed, 70, 10, 0);
+    fill(255, 204, 102);
+    textFont(f); 
+    textSize(20);
+    text("SHIFT_ON", 430, 430, 0);
   }else{
     camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
     directionalLight(50, 100, 125, 0, -1, 0); 
@@ -232,7 +235,7 @@ void mouseWheel(MouseEvent event)
   } 
   else if(depth + e > 400)
   {
-    depth = 400;
+    depth = 500;
   } 
   else
   {

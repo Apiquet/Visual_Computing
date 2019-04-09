@@ -22,12 +22,12 @@ class Particle {
   
   // Method to display
   void display() {
-    pushMatrix();
-    stroke(255, lifespan);
-    fill(255, lifespan);
-    translate(center.x, center.y, center.z);
-    rotateX(radians(90));
-    shape(openCylinder);
-    popMatrix();
+    gameSurface.pushMatrix();
+    gameSurface.stroke(255, lifespan);
+    gameSurface.fill(255, lifespan);
+    gameSurface.translate(center.x, center.y, center.z);
+    gameSurface.rotateX(radians(90));
+    gameSurface.shape(openCylinder);
+    gameSurface.popMatrix();
   }
 }

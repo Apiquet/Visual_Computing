@@ -30,17 +30,6 @@ class Mover {
       location.add(velocity);
   }
 
-  // Method to drow the mover at the correct location
-  void display(float rayon)
-  {
-     translate(location.x,-12,-location.z);
-     pushMatrix();
-     rotateX(location.z/rayon); // for the rotation of the sphere
-     rotateY(location.x/rayon);
-     shape(globe); // instead of sphere(10);
-     popMatrix();
-  }
-
   // Method for collision with box edges
   void checkEdges(float box_edge) 
   {

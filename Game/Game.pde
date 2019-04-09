@@ -3,7 +3,7 @@ Global Variables
 */
 Mover mover;
 ParticleSystem ParticleSystem;
-float dx, dy, rx, rz, depth = 500, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20;
+float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20;
 boolean shiftIsPressed = false, user_won = false, was_clicked = false, particle_ON = false;
 int cylinderResolution = 40;
 ArrayList<PVector> clicks_shiftEnabled = new ArrayList(), clicks_shiftDisabled = new ArrayList();
@@ -11,12 +11,19 @@ PShape globe, robotnik, openCylinder = new PShape();
 PVector particle_origin;  
 PFont f;
 String text_displayed = " ";
+PGraphics gameSurface; 
+PGraphics scoreboard;
+PGraphics topView;
 
 void settings() {
   size(500, 500, P3D);
 }
 
 void setup() {
+  
+  gameSurface = createGraphics(width, height-100, P3D);
+  scoreboard = createGraphics(width, 100, P3D);
+  topView = createGraphics(100, 100, P3D);
 
   stroke(0);
   mover = new Mover();
@@ -34,10 +41,41 @@ void setup() {
 }
 
 void draw(){
+  drawGame();
+  image(gameSurface, 0, 0);
+  drawScoreboard();
+  image(scoreboard, 0, height-100);
+  drawTopView();
+  image(topView, 0, height-100);
+}
+
+void drawTopView(){
+  topView.beginDraw();
+  topView.background(255);
+  topView.endDraw();
+}
+
+void drawScoreboard(){
+  scoreboard.beginDraw();
+  scoreboard.background(0);
+  scoreboard.endDraw();
+}
+
+void drawGame(){
+  gameSurface.beginDraw();
   if (shiftIsPressed)
     updating_scene_shiftON();
   else
     updating_scene_shiftOFF();
+  gameSurface.endDraw();
+}
+
+void setting_scene_and_background() {
+
+  gameSurface.camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
+  //gameSurface.directionalLight(50, 100, 125, 0, -1, 0); 
+  //gameSurface.ambientLight(102, 102, 102);
+  gameSurface.background(225);
 }
 
 /*
@@ -46,22 +84,23 @@ Drawing scene in SHIFT ON mode: top view of the board where user can click to se
 void updating_scene_shiftON() {
 
   setting_scene_and_background();
-  pushMatrix();
-  translate(width/2, height/2, 0);
-  rotateX(radians(90));
-  rotateZ(0);
-  fill(200,100,0,50);
-  box(box_size, 5, box_size);
-  popMatrix();
+  gameSurface.pushMatrix();
+  gameSurface.translate(width/2, height/2, 0);
+  gameSurface.rotateX(radians(90));
+  gameSurface.rotateZ(0);
+  //gameSurface.fill(200,100,0,50);
+  gameSurface.noFill();
+  gameSurface.box(box_size, 5, box_size);
+  gameSurface.popMatrix();
   //if the user clicked on the plate, we add his click on the clicks_shiftEnabled object with x and y position, we then display the cylinder
   //if the user then click on another postion, we replace x and y 
   if(clicks_shiftEnabled.size()>0) 
     displaying_cylinder_shiftON();
-  pushMatrix();
+  gameSurface.pushMatrix();
   //displaying a cylinder on the mouse position
-  translate(mouseX, mouseY, 0);
-  shape(openCylinder);
-  popMatrix();
+  gameSurface.translate(mouseX, mouseY, 0);
+  gameSurface.shape(openCylinder);
+  gameSurface.popMatrix();
   //displaying rotations, speed and if the user won
   displaying_text();  
 }
@@ -72,10 +111,11 @@ Drawing scene in game mode (SHIFT released): the user can rotate the plate to mo
 void updating_scene_shiftOFF() {
 
   setting_scene_and_background();
-  translate(width/2, height/2, 0);
-  pushMatrix();
-  rotateX(rx);
-  rotateZ(rz);
+  gameSurface.background(225);
+  gameSurface.translate(width/2, height/2, 0);
+  gameSurface.pushMatrix();
+  gameSurface.rotateX(rx);
+  gameSurface.rotateZ(rz);
   //if the user clicked on the plate in SHIFT ON mode, we draw Robotnik at the corresponding position
   if(clicks_shiftEnabled.size()>0) 
     displaying_robotnik();
@@ -91,10 +131,22 @@ void updating_scene_shiftOFF() {
   mover.update(rx, rz);
   mover.checkEdges(box_size/2);
   mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize);
-  mover.display(rayon);
-  popMatrix();
+  displaying_mover();
+  gameSurface.popMatrix();
   //displaying rotation and speed
   displaying_text(); 
+}
+
+/*
+Displaying mover at the good position
+*/
+void displaying_mover() {
+  gameSurface.translate(mover.location.x,-12,-mover.location.z);
+  gameSurface.pushMatrix();
+  gameSurface.rotateX(mover.location.z/rayon); // for the rotation of the sphere
+  gameSurface.rotateY(mover.location.x/rayon);
+  gameSurface.shape(globe); // instead of sphere(10);
+  gameSurface.popMatrix();
 }
 
 /*
@@ -102,20 +154,20 @@ Displaying robotnik at the good position
 */
 void displaying_robotnik() {
 
-  pushMatrix();
-  translate(particle_origin.x, 0, particle_origin.z);
-  rotateX(radians(90));
-  shape(openCylinder);
-  popMatrix();
-  pushMatrix();
+  gameSurface.pushMatrix();
+  gameSurface.translate(particle_origin.x, 0, particle_origin.z);
+  gameSurface.rotateX(radians(90));
+  gameSurface.shape(openCylinder);
+  gameSurface.popMatrix();
+  gameSurface.pushMatrix();
   //Robotnik continuously look at the ball!
   float ang = atan2(mover.location.x-particle_origin.x, mover.location.z-particle_origin.z);
-  translate(particle_origin.x, 0, particle_origin.z);
-  rotateX(radians(180));
-  rotateY(ang);
-  scale(50);
-  shape(robotnik, 0,0);
-  popMatrix();
+  gameSurface.translate(particle_origin.x, 0, particle_origin.z);
+  gameSurface.rotateX(radians(180));
+  gameSurface.rotateY(ang);
+  gameSurface.scale(50);
+  gameSurface.shape(robotnik, 0,0);
+  gameSurface.popMatrix();
 }
 
 /*
@@ -123,10 +175,10 @@ Displaying the cylinder at the clicked position
 */
   void displaying_cylinder_shiftON() {
   
-  pushMatrix();
-  translate(clicks_shiftEnabled.get(0).x, clicks_shiftEnabled.get(0).y, 0);
-  shape(openCylinder);
-  popMatrix();  
+  gameSurface.pushMatrix();
+  gameSurface.translate(clicks_shiftEnabled.get(0).x, clicks_shiftEnabled.get(0).y, 0);
+  gameSurface.shape(openCylinder);
+  gameSurface.popMatrix();  
 }
 
 /*
@@ -134,23 +186,12 @@ Creating a plate with tranparency to allow user to continuously see the ball
 */
 void creating_plate() {
 
-  fill(200,100,0,50); // semi-transparent
-  box(box_size, 5, box_size);
-  hint(DISABLE_DEPTH_TEST);
-  noFill();
-  stroke(10);
-  box(box_size, 5, box_size);
-}
-
-/*
-Setting scene and background
-*/
-void setting_scene_and_background() {
-
-  camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
-  directionalLight(50, 100, 125, 0, -1, 0); 
-  ambientLight(102, 102, 102);
-  background(225);
+  //gameSurface.fill(200,100,0); // semi-transparent
+  //gameSurface.box(box_size, 5, box_size);
+  //gameSurface.hint(DISABLE_DEPTH_TEST);
+  gameSurface.noFill();
+  gameSurface.stroke(10);
+  gameSurface.box(box_size, 5, box_size);
 }
 
 /*
@@ -158,27 +199,27 @@ Dislaying text in SHIFT ON mode and game mode, it also display a message when us
 */
 void displaying_text() {
 
-  fill(0);
-  textFont(f);
+  gameSurface.fill(0);
+  gameSurface.textFont(f);
   if(shiftIsPressed) {
-    textSize(19);
+    gameSurface.textSize(19);
     text_displayed = "RotationX: 90; RotationZ: 0; Speed: "+ String.format("%.2f", speed);
-    text(text_displayed,-28,0,0);
-    textSize(20);
-    text("SHIFT_ON", 430, 430, 0);
+    gameSurface.text(text_displayed,-28,0,0);
+    gameSurface.textSize(20);
+    gameSurface.text("SHIFT_ON", 430, 430, 0);
   } else { 
-    textSize(8);
+    gameSurface.textSize(8);
     text_displayed = "RotationX: "+ String.format("%.2f", degrees(rx)) +"; RotationZ: "+ String.format("%.2f", degrees(rz)) +"; Speed: "+ String.format("%.2f", speed);
-    text(text_displayed,-110,-100,depth-200); 
+    gameSurface.text(text_displayed,-110,-100,depth-200); 
     //if user won we display a message
     if(user_won) {
-      textSize(15);
-      fill(0, 204, 102);
-      text("You hit Robotnik! You won!",-90,-65,depth-200); 
-      fill(0);
-      textSize(7);
-      text("Press SHIFT to choose another position for Robotnik",-90,-50,depth-200); 
-      fill(0);
+      gameSurface.textSize(15);
+      gameSurface.fill(0, 204, 102);
+      gameSurface.text("You hit Robotnik! You won!",-90,-65,depth-200); 
+      gameSurface.fill(0);
+      gameSurface.textSize(7);
+      gameSurface.text("Press SHIFT to choose another position for Robotnik",-90,-50,depth-200); 
+      gameSurface.fill(0);
     }
   }   
 }
@@ -187,11 +228,11 @@ void displaying_text() {
 Changing color when user clicks
 */
 void mousePressed() {
-  stroke(255);
+  gameSurface.stroke(255);
 }
 
 void mouseReleased() {
-  stroke(0);
+  gameSurface.stroke(0);
 }
 
 /*
@@ -321,5 +362,5 @@ void creating_cylinder() {
   
   PImage tree = loadImage("tree.jpg");
   openCylinder.setTexture(tree);
-  openCylinder.setStroke(true);
+  openCylinder.setStroke(false);
 }

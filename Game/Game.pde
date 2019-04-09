@@ -3,17 +3,16 @@ Global Variables
 */
 Mover mover;
 ParticleSystem ParticleSystem;
-float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20, score = 0;
+HScrollbar hs;
+float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20, score = 0, chartCounter = 0;
 boolean shiftIsPressed = false, user_won = false, was_clicked = false, particle_ON = false;
 int cylinderResolution = 40;
 ArrayList<PVector> clicks_shiftEnabled = new ArrayList(), clicks_shiftDisabled = new ArrayList();
 PShape globe, robotnik, openCylinder = new PShape();
 PVector particle_origin;  
 PFont f;
-String text_displayed = " ";
-PGraphics gameSurface; 
-PGraphics scoreboard;
-PGraphics topView;
+String text_displayed = " ", text_score = " ", text_velocity = " ";
+PGraphics gameSurface, scoreboard, barChart, topView;
 
 void settings() {
   size(500, 500, P3D);
@@ -21,9 +20,12 @@ void settings() {
 
 void setup() {
   
+  hs = new HScrollbar(200, 490, 300, 10);
+  
   gameSurface = createGraphics(width, height-100, P3D);
-  scoreboard = createGraphics(100, 100, P3D);
+  scoreboard = createGraphics(100, 100, P2D);
   topView = createGraphics(100, 100, P2D);
+  barChart = createGraphics(300, 90, P2D);
 
   stroke(0);
   mover = new Mover();
@@ -44,9 +46,32 @@ void draw(){
   drawGame();
   image(gameSurface, 0, 0);
   drawScoreboard();
-  image(scoreboard, 120, height-100);
+  image(scoreboard, 100, height-100);
   drawTopView();
   image(topView, 0, height-100);
+  drawBarChart();
+  image(barChart, 200, height-100);
+  hs.update(); 
+  hs.display();
+}
+
+void drawBarChart(){
+  barChart.beginDraw();
+  if(!user_won){
+    if(frameCount % 20 == 0){
+      if(score >= 0){
+        barChart.fill(0, 255, 0);
+        barChart.rect(10*chartCounter, 50, 10, -score);
+        chartCounter += 1;
+      }
+      else if(score < 0){
+        barChart.fill(255, 0, 0);
+        barChart.rect(10*chartCounter, 50, 10, -score);
+        chartCounter += 1;
+      }
+    }
+  }
+  barChart.endDraw();
 }
 
 void drawTopView(){
@@ -85,9 +110,12 @@ void drawScoreboard(){
   scoreboard.beginDraw();
   scoreboard.background(0);
   
-  gameSurface.textSize(19);
-  text_displayed = "RotationX: 90; RotationZ: 0; Speed: "+ String.format("%.2f", speed);
-  gameSurface.text(text_displayed,-28,0,0);
+  scoreboard.fill(255);
+  scoreboard.textSize(10);
+  text_score = "Total score :"+ String.format("%.2f", score);
+  scoreboard.text(text_score, 5, 20);
+  text_velocity = "Velocity :"+ String.format("%.2f", mover.velocity.mag());
+  scoreboard.text(text_velocity, 5, 40);
   
   scoreboard.endDraw();
 }
@@ -153,7 +181,7 @@ void updating_scene_shiftOFF() {
   if(particle_ON) {
     if(frameCount % 20 == 0 && !user_won) {
       ParticleSystem.addParticle();
-      score -= 10;
+      score -= 2;
     }
     for(int i=0; i < ParticleSystem.particles.size(); i++) {
       gameSurface.pushMatrix();
@@ -167,7 +195,7 @@ void updating_scene_shiftOFF() {
   creating_plate();
   mover.update(rx, rz);
   mover.checkEdges(box_size/2);
-  mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize);
+  score += mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize);
   displaying_mover();
   gameSurface.popMatrix();
   //displaying rotation and speed
@@ -306,6 +334,7 @@ void keyPressed() {
     }
     if (keyCode == SHIFT) {
       user_won = false;
+      score = 0;
       shiftIsPressed = true;
     }
   }

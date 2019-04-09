@@ -3,7 +3,7 @@ Global Variables
 */
 Mover mover;
 ParticleSystem ParticleSystem;
-float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20;
+float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20, score = 0;
 boolean shiftIsPressed = false, user_won = false, was_clicked = false, particle_ON = false;
 int cylinderResolution = 40;
 ArrayList<PVector> clicks_shiftEnabled = new ArrayList(), clicks_shiftDisabled = new ArrayList();
@@ -22,8 +22,8 @@ void settings() {
 void setup() {
   
   gameSurface = createGraphics(width, height-100, P3D);
-  scoreboard = createGraphics(width, 100, P3D);
-  topView = createGraphics(100, 100, P3D);
+  scoreboard = createGraphics(100, 100, P3D);
+  topView = createGraphics(100, 100, P2D);
 
   stroke(0);
   mover = new Mover();
@@ -44,7 +44,7 @@ void draw(){
   drawGame();
   image(gameSurface, 0, 0);
   drawScoreboard();
-  image(scoreboard, 0, height-100);
+  image(scoreboard, 120, height-100);
   drawTopView();
   image(topView, 0, height-100);
 }
@@ -52,12 +52,43 @@ void draw(){
 void drawTopView(){
   topView.beginDraw();
   topView.background(255);
+  topView.fill(200);
+  topView.scale(0.3333);
+  topView.rect(0, 0, 300, 300);
+  if(particle_ON) {
+    for(int i = 0; i < ParticleSystem.particles.size(); i++) {
+      float x = (ParticleSystem.particles.get(i).center.x + box_size - 5*cylinderBaseSize) - 100;
+      float y = (ParticleSystem.particles.get(i).center.z + box_size - 5*cylinderBaseSize) - 100;
+      if(i == 0) {
+        topView.fill(0);
+        topView.noStroke();
+        topView.ellipse(x, y, 20, 20);
+      }
+      else {
+      topView.fill(255);
+      topView.noStroke();
+      topView.ellipse(x, y, 20, 20);
+      }
+    }
+  }
+  
+  float x = (mover.location.x + box_size - 5*cylinderBaseSize) - 100;
+  float y = (mover.location.z + box_size - 5*cylinderBaseSize) - 100;
+  topView.fill(100);
+  topView.stroke(10);
+  topView.ellipse(x, box_size-y, 15, 15);
+  
   topView.endDraw();
 }
 
 void drawScoreboard(){
   scoreboard.beginDraw();
   scoreboard.background(0);
+  
+  gameSurface.textSize(19);
+  text_displayed = "RotationX: 90; RotationZ: 0; Speed: "+ String.format("%.2f", speed);
+  gameSurface.text(text_displayed,-28,0,0);
+  
   scoreboard.endDraw();
 }
 
@@ -98,7 +129,7 @@ void updating_scene_shiftON() {
     displaying_cylinder_shiftON();
   gameSurface.pushMatrix();
   //displaying a cylinder on the mouse position
-  gameSurface.translate(mouseX, mouseY, 0);
+  gameSurface.translate(mouseX, mouseY+50, 0);
   gameSurface.shape(openCylinder);
   gameSurface.popMatrix();
   //displaying rotations, speed and if the user won
@@ -111,7 +142,6 @@ Drawing scene in game mode (SHIFT released): the user can rotate the plate to mo
 void updating_scene_shiftOFF() {
 
   setting_scene_and_background();
-  gameSurface.background(225);
   gameSurface.translate(width/2, height/2, 0);
   gameSurface.pushMatrix();
   gameSurface.rotateX(rx);
@@ -123,8 +153,15 @@ void updating_scene_shiftOFF() {
   if(particle_ON) {
     if(frameCount % 20 == 0 && !user_won) {
       ParticleSystem.addParticle();
+      score -= 10;
     }
-    ParticleSystem.run();
+    for(int i=0; i < ParticleSystem.particles.size(); i++) {
+      gameSurface.pushMatrix();
+      gameSurface.translate(ParticleSystem.particles.get(i).center.x, ParticleSystem.particles.get(i).center.y, ParticleSystem.particles.get(i).center.z);
+      gameSurface.rotateX(radians(90));
+      gameSurface.shape(openCylinder);
+      gameSurface.popMatrix();
+    }
   }
   //creating plate and moving ball
   creating_plate();
@@ -303,14 +340,14 @@ Let user setting robotnik position
 */
 void mouseClicked() {
   //verifying the user clicked on the plate
-  if(shiftIsPressed && mouseX < box_size + (width-box_size)/2 && mouseY < box_size + (height-box_size)/2 && mouseX > (width-box_size)/2 && mouseY > (height-box_size)/2) { 
+  if(shiftIsPressed && mouseX < box_size + (width-box_size)/2 && mouseY+50 < box_size + (height-box_size)/2 && mouseX > (width-box_size)/2 && mouseY+50 > (height-box_size)/2) { 
     //clear the ArrayLists to add new position for Robotnik
     clicks_shiftDisabled.clear();
     clicks_shiftEnabled.clear();
     if(clicks_shiftDisabled.size()==0) {
       //adding position of cylinder in SHIFT ON mode and in game mode
-      clicks_shiftEnabled.add( new PVector( mouseX, mouseY, 0 ) );
-      particle_origin = new PVector( mouseX - box_size + 5*cylinderBaseSize, 0, mouseY - box_size + 5*cylinderBaseSize );
+      clicks_shiftEnabled.add( new PVector( mouseX, mouseY+50, 0 ) );
+      particle_origin = new PVector( mouseX - box_size + 5*cylinderBaseSize, 0, mouseY+50 - box_size + 5*cylinderBaseSize );
       clicks_shiftDisabled.add(particle_origin);
       ParticleSystem = new ParticleSystem(particle_origin);
       particle_ON = true;

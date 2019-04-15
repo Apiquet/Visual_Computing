@@ -58,13 +58,5 @@ class ParticleSystem {
       return false;
     }
     return true;
-  }
-
-  // Iteratively update and display every particle
-  void run() {
-    for(int i=0; i < particles.size(); i++) {
-      particles.get(i).update();
-      particles.get(i).display();
-    }
   } 
 }

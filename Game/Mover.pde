@@ -19,7 +19,7 @@ class Mover {
       gravityForce.x = sin(rotz) * gravityConstant;
       gravityForce.z = sin(rotx) * gravityConstant;
       float normalForce = 1;
-      float mu = 0.1;
+      float mu = 0.2;
       float frictionMagnitude = normalForce * mu;
       PVector friction = velocity.copy();
       friction.mult(-1);
@@ -28,17 +28,6 @@ class Mover {
       velocity.add(gravityForce);
       velocity.add(friction);
       location.add(velocity);
-  }
-
-  // Method to drow the mover at the correct location
-  void display(float rayon)
-  {
-     translate(location.x,-12,-location.z);
-     pushMatrix();
-     rotateX(location.z/rayon); // for the rotation of the sphere
-     rotateY(location.x/rayon);
-     shape(globe); // instead of sphere(10);
-     popMatrix();
   }
 
   // Method for collision with box edges
@@ -64,20 +53,23 @@ class Mover {
   }
   
   // Method for collision with cylinders
-  void ckeckCylinderCollision(ArrayList<PVector> Cylinderlocations, float radiusSphere, float radiusCylinder) {
+  float ckeckCylinderCollision(ArrayList<PVector> Cylinderlocations, float radiusSphere, float radiusCylinder) {
     for(int i=0; i < Cylinderlocations.size(); i++) {
       float distance = dist(location.x, 0, location.z, Cylinderlocations.get(i).x, 0, Cylinderlocations.get(i).z * -1);
       if (distance <= radiusCylinder+radiusSphere) {
         if(i==0){
           user_won = true;
           particle_ON = false;
-          return;
+          return 0;
         }
         PVector n = new PVector(location.x - Cylinderlocations.get(i).x, 0, location.z - Cylinderlocations.get(i).z * -1).normalize();
+        float score = velocity.mag();
         velocity.sub(n.mult(2*velocity.dot(n)));
         clicks_shiftDisabled.remove(i);
         ParticleSystem.particles.remove(i);
+        return score;
       }
     }
+    return 0;
   }
 }

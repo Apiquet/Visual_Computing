@@ -47,7 +47,7 @@ void draw() {
   thresholdBar2.update();
   threshold2 = thresholdBar2.getPos()*255;
   
-  print(imagesEqual(board1Thresholded, board_threshold));
+  //print(imagesEqual(board1Thresholded, board_threshold));
 }
 
 PImage threshold_up(PImage img, float threshold){

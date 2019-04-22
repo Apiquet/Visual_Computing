@@ -90,15 +90,18 @@ class BlobDetection {
     color orange = color(255, 204, 0);
     color red = color(204, 51, 0);
     color blue = color(51, 153, 255);
+    color purple = color(153, 51, 255);
+    color green_light = color(102, 255, 102);
+    color green = color(0, 153, 153);
     for(int i = 0; i < result.width*result.height ; i++){
       //assuming that all the three channels have the same value
       if(labels[i] == 1 ) result.pixels[i] = pink;
       else if(labels[i] == 2 ) result.pixels[i] = orange;
       else if(labels[i] == 3 ) result.pixels[i] = red;
       else if(labels[i] == 4 ) result.pixels[i] = blue;
-      else if(labels[i] == 5 ) result.pixels[i] = blue;
-      else if(labels[i] == 6 ) result.pixels[i] = blue;
-      else if(labels[i] == 7 ) result.pixels[i] = blue;
+      else if(labels[i] == 5 ) result.pixels[i] = purple;
+      else if(labels[i] == 6 ) result.pixels[i] = green_light;
+      else if(labels[i] == 7 ) result.pixels[i] = green;
       else result.pixels[i] = color(255,255,255);
     }
     // TODO!

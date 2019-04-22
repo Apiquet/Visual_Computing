@@ -81,7 +81,6 @@ class BlobDetection {
             labels[i] = currentLabel;
           }          
         }
-        //labels[i] = 1;
       }
       else labels[i] = 1000;
     }
@@ -102,7 +101,7 @@ class BlobDetection {
       else if(labels[i] == 5 ) result.pixels[i] = purple;
       else if(labels[i] == 6 ) result.pixels[i] = green_light;
       else if(labels[i] == 7 ) result.pixels[i] = green;
-      else result.pixels[i] = color(255,255,255);
+      else result.pixels[i] = color(0,0,0);
     }
     // TODO!
     // Second pass: re-label the pixels by their equivalent class

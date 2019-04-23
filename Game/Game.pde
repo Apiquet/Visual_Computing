@@ -4,10 +4,11 @@ Global Variables
 Mover mover;
 ParticleSystem ParticleSystem;
 HScrollbar hs;
-float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20, score = 0, chartCounter = 0;
+float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20;
 boolean shiftIsPressed = false, user_won = false, was_clicked = false, particle_ON = false;
 int cylinderResolution = 40;
 ArrayList<PVector> clicks_shiftEnabled = new ArrayList(), clicks_shiftDisabled = new ArrayList();
+ArrayList<Float> scores = new ArrayList<Float>();
 PShape globe, robotnik, openCylinder = new PShape();
 PVector particle_origin;  
 PFont f;
@@ -50,25 +51,23 @@ void draw(){
   drawTopView();
   image(topView, 0, height-100);
   drawBarChart();
-  image(barChart, 200, height-100);
+  image(barChart, 200, height-100, 300, 100);
   hs.update(); 
   hs.display();
 }
 
 void drawBarChart(){
   barChart.beginDraw();
-  if(!user_won){
-    if(frameCount % 20 == 0){
-      if(score >= 0){
-        barChart.fill(0, 255, 0);
-        barChart.rect(10*chartCounter, 50, 10, -score);
-        chartCounter += 1;
-      }
-      else if(score < 0){
-        barChart.fill(255, 0, 0);
-        barChart.rect(10*chartCounter, 50, 10, -score);
-        chartCounter += 1;
-      }
+  barChart.background(200);
+  barChart.noStroke();
+  for(int i = 0; i < scores.size(); ++i) {
+    if(scores.get(i) >= 0){
+      barChart.fill(0, 255, 0);
+      barChart.rect(hs.getPos()*i, 50, hs.getPos(), -scores.get(i)/2);
+    }
+    else if(scores.get(i) < 0){
+      barChart.fill(255, 0, 0);
+      barChart.rect(hs.getPos()*i, 50, hs.getPos(), -scores.get(i)/2);
     }
   }
   barChart.endDraw();
@@ -112,8 +111,14 @@ void drawScoreboard(){
   
   scoreboard.fill(255);
   scoreboard.textSize(10);
-  text_score = "Total score :"+ String.format("%.2f", score);
-  scoreboard.text(text_score, 5, 20);
+  if(scores.size() == 0) {
+    text_score = "Total score :"+ String.format("%.2f", (float) 0);
+    scoreboard.text(text_score, 5, 20);
+  }
+  else {
+    text_score = "Total score :"+ String.format("%.2f", scores.get(scores.size()-1));
+    scoreboard.text(text_score, 5, 20);
+  }
   text_velocity = "Velocity :"+ String.format("%.2f", mover.velocity.mag());
   scoreboard.text(text_velocity, 5, 40);
   
@@ -181,7 +186,9 @@ void updating_scene_shiftOFF() {
   if(particle_ON) {
     if(frameCount % 20 == 0 && !user_won) {
       ParticleSystem.addParticle();
-      score -= 2;
+      if(scores.size() != 0) {
+        scores.add(scores.get(scores.size()-1) - 5);
+      }
     }
     for(int i=0; i < ParticleSystem.particles.size(); i++) {
       gameSurface.pushMatrix();
@@ -195,7 +202,12 @@ void updating_scene_shiftOFF() {
   creating_plate();
   mover.update(rx, rz);
   mover.checkEdges(box_size/2);
-  score += mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize);
+  if(scores.size() == 0) {
+    scores.add(mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize));
+  }
+  else {
+  scores.add(scores.get(scores.size()-1) + mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize));
+  }
   displaying_mover();
   gameSurface.popMatrix();
   //displaying rotation and speed
@@ -305,18 +317,20 @@ Rotating plate when mouse is dragged
 */
 void mouseDragged() {
 
-  dx += mouseX - pmouseX;
-  dy += mouseY - pmouseY;
-  rx = map(-dy*speed, 0, height, 0, PI);
-  rz = map(dx*speed, 0, width, 0, PI);
-  if (rz > radians(60)) 
-    rz = radians(60);
-  else if (rz < radians(-60)) 
-    rz = radians(-60);
-  if (rx > radians(60)) 
-    rx = radians(60);
-  else if (rx < radians(-60)) 
-    rx = radians(-60);
+  if(mouseOverGame()) {
+    dx += mouseX - pmouseX;
+    dy += mouseY - pmouseY;
+    rx = map(-dy*speed, 0, height, 0, PI);
+    rz = map(dx*speed, 0, width, 0, PI);
+    if (rz > radians(60)) 
+      rz = radians(60);
+    else if (rz < radians(-60)) 
+      rz = radians(-60);
+    if (rx > radians(60)) 
+      rx = radians(60);
+    else if (rx < radians(-60)) 
+      rx = radians(-60);
+  }
 }
 
 /*
@@ -334,7 +348,6 @@ void keyPressed() {
     }
     if (keyCode == SHIFT) {
       user_won = false;
-      score = 0;
       shiftIsPressed = true;
     }
   }
@@ -359,6 +372,7 @@ void keyReleased() {
 
   if (key==CODED) {
     if (keyCode == SHIFT) {
+        scores.clear();
         shiftIsPressed = false;
     }
   }
@@ -382,6 +396,13 @@ void mouseClicked() {
       particle_ON = true;
     }
   }
+}
+
+boolean mouseOverGame() {
+  if(mouseY <= 400) {
+    return true;
+  }
+  else return false;
 }
 
 /*

@@ -33,7 +33,7 @@ class BlobDetection {
         }
         // first column
         else if((i+1)%input.width == 1){
-          int minLabel = currentLabel; //<>//
+          int minLabel = currentLabel;
           boolean foundLabel = false;
           for(int j=0; j<2; j++){
             if(labels[i-input.width+j] < minLabel && labels[i-input.width+j]>0){
@@ -170,11 +170,28 @@ class BlobDetection {
       }
     }
     // if onlyBiggest==true, count the number of pixels for each label
-    
+    if(onlyBiggest){
+      int blockToKeep = -1;
+      int sum1 = 0;
+      int sum2 = 0;
+      for(int label = 1; label < currentLabel; label++){
+        for(int i=0; i< input.width*input.height; i++){  
+          if(labels[i] == label) sum1++;
+        }
+        if(sum2<sum1){
+          sum2 = sum1;
+          blockToKeep = label;
+        }
+        sum1 = 0;
+      }
+      for(int i=0; i< input.width*input.height; i++){
+        if(labels[i] != blockToKeep) labels[i] = -1;
+      }
+    }
     // Finally,
     // if onlyBiggest==false, output an image with each blob colored in one uniform color
     // if onlyBiggest==true, output an image with the biggest blob colored in white and the others in black
-    // TODO!
+    
     PImage result = createImage(input.width, input.height, RGB);
     color pink = color(255, 102, 204);
     color orange = color(255, 204, 0);

@@ -50,10 +50,14 @@ class BlobDetection {
                   if(labelsEquivalences.get(el).contains(minLabel) && labelsEquivalences.get(el).contains(labels[i-input.width+j])) treeContainsElmts = true;
                 }
                 if(!treeContainsElmts){
-                  TreeSet newTreeset = new TreeSet();
-                  newTreeset.add(minLabel);
-                  newTreeset.add(labels[i-input.width+j]);
-                  labelsEquivalences.add(newTreeset);
+                  if(labelsEquivalences.size()<minLabel){
+                    Integer size= labelsEquivalences.size();
+                    for(int el = 0; el < minLabel-size; el++){
+                      labelsEquivalences.add(new TreeSet());
+                    }
+                  }
+                  labelsEquivalences.get(minLabel).add(labels[i-input.width+j]);
+                  labelsEquivalences.get(labels[i-input.width+j]-1).add(minLabel);
                 }
               }
             }
@@ -85,10 +89,14 @@ class BlobDetection {
                   if(labelsEquivalences.get(el).contains(minLabel) && labelsEquivalences.get(el).contains(labels[i-1])) treeContainsElmts = true;
                 }
                 if(!treeContainsElmts){
-                  TreeSet newTreeset = new TreeSet();
-                  newTreeset.add(minLabel);
-                  newTreeset.add(labels[i-1]);
-                  labelsEquivalences.add(newTreeset);
+                  if(labelsEquivalences.size()<labels[i-1]){
+                    Integer size= labelsEquivalences.size();
+                    for(int el = 0; el < labels[i-1]-size; el++){
+                      labelsEquivalences.add(new TreeSet());
+                    }
+                  }
+                  labelsEquivalences.get(minLabel-1).add(labels[i-1]);
+                  labelsEquivalences.get(labels[i-1]-1).add(minLabel);
                 }
             }
             for(int j=0; j<2; j++){
@@ -98,10 +106,14 @@ class BlobDetection {
                   if(labelsEquivalences.get(el).contains(minLabel) && labelsEquivalences.get(el).contains(labels[i-input.width-1+j])) treeContainsElmts = true;
                 }
                 if(!treeContainsElmts){
-                  TreeSet newTreeset = new TreeSet();
-                  newTreeset.add(minLabel);
-                  newTreeset.add(labels[i-input.width-1+j]);
-                  labelsEquivalences.add(newTreeset);
+                  if(labelsEquivalences.size()<labels[i-input.width-1+j]){
+                    Integer size= labelsEquivalences.size();
+                    for(int el = 0; el < labels[i-input.width-1+j]-size; el++){
+                      labelsEquivalences.add(new TreeSet());
+                    }
+                  }
+                  labelsEquivalences.get(minLabel-1).add(labels[i-input.width-1+j]);
+                  labelsEquivalences.get(labels[i-input.width-1+j]-1).add(minLabel);
                 }
               }
             }
@@ -134,10 +146,14 @@ class BlobDetection {
                 if(labelsEquivalences.get(el).contains(minLabel) && labelsEquivalences.get(el).contains(labels[i-1])) treeContainsElmts = true;
               }
               if(!treeContainsElmts){
-                TreeSet newTreeset = new TreeSet();
-                newTreeset.add(minLabel);
-                newTreeset.add(labels[i-1]);
-                labelsEquivalences.add(newTreeset);
+                if(labelsEquivalences.size()<labels[i-1]){ //<>//
+                    Integer size= labelsEquivalences.size();
+                    for(int el = 0; el < labels[i-1]-size; el++){
+                      labelsEquivalences.add(new TreeSet());
+                    }
+                  }
+                  labelsEquivalences.get(minLabel-1).add(labels[i-1]);
+                  labelsEquivalences.get(labels[i-1]-1).add(minLabel);
               }
             }
             for(int j=0; j<3; j++){
@@ -147,10 +163,14 @@ class BlobDetection {
                   if(labelsEquivalences.get(el).contains(minLabel) && labelsEquivalences.get(el).contains(labels[i-input.width-1+j])) treeContainsElmts = true;
                 }
                 if(!treeContainsElmts){
-                  TreeSet newTreeset = new TreeSet();
-                  newTreeset.add(minLabel);
-                  newTreeset.add(labels[i-input.width-1+j]);
-                  labelsEquivalences.add(newTreeset);
+                  if(labelsEquivalences.size()<labels[i-input.width-1+j]){
+                    Integer size= labelsEquivalences.size();
+                    for(int el = 0; el < labels[i-input.width-1+j]-size; el++){
+                      labelsEquivalences.add(new TreeSet());
+                    }
+                  }
+                  labelsEquivalences.get(minLabel-1).add(labels[i-input.width-1+j]);
+                  labelsEquivalences.get(labels[i-input.width-1+j]-1).add(minLabel);
                 }
               }
             }
@@ -163,10 +183,14 @@ class BlobDetection {
       }
       else labels[i] = -1;
     }
+    for(int el = 1; el <= labelsEquivalences.size(); el++){
+      labelsEquivalences.get(el-1).add(el);
+    }
+    println(labelsEquivalences);
     // Second pass: re-label the pixels by their equivalent class
     for(int el = 0; el < labelsEquivalences.size(); el++){
       for(int i=0; i< input.width*input.height; i++){  
-        if(labels[i] == labelsEquivalences.get(el).last()) labels[i] = labelsEquivalences.get(el).first();
+        if(labelsEquivalences.get(el).contains(labels[i])) labels[i] = labelsEquivalences.get(el).first();
       }
     }
     // if onlyBiggest==true, count the number of pixels for each label
@@ -226,5 +250,5 @@ void draw() {
   image(test_img, 0, 0);//show image
   
   image(img2, img2.width + 20, 0, img2.width*3, img2.height*3);
-  //println(labelsEquivalences);
+  println(labelsEquivalences);
 }

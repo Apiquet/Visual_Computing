@@ -194,27 +194,17 @@ class BlobDetection {
     // if onlyBiggest==true, output an image with the biggest blob colored in white and the others in black
     
     PImage result = createImage(input.width, input.height, RGB);
-    color pink = color(255, 102, 204);
-    color white = color(255,255,255);
-    color orange = color(255, 204, 0);
-    color red = color(204, 51, 0);
-    color blue = color(51, 153, 255);
-    color purple = color(153, 51, 255);
-    color green_light = color(102, 255, 102);
-    color green = color(0, 153, 153);
-    color blue_sky = color(204, 255, 255);
+    
+    color[] colorEquivalences = new color[currentLabel];
+    for(int c=0; c<currentLabel;c++){
+      color randomColor = (int)((Math.random() + 10) * 0x1000000);
+      colorEquivalences[c] = randomColor;
+    }
+
     
     for(int i = 0; i < result.width*result.height ; i++){
       //assuming that all the three channels have the same value
-      if(labels[i] == 1 ) result.pixels[i] = white;
-      else if(labels[i] == 2 ) result.pixels[i] = orange;
-      else if(labels[i] == 3 ) result.pixels[i] = red;
-      else if(labels[i] == 4 ) result.pixels[i] = blue;
-      else if(labels[i] == 5 ) result.pixels[i] = purple;
-      else if(labels[i] == 6 ) result.pixels[i] = green_light;
-      else if(labels[i] == 7 ) result.pixels[i] = green;
-      else if(labels[i] == 8 ) result.pixels[i] = blue_sky;
-      else if(labels[i] == 9 ) result.pixels[i] = pink;
+      if(labels[i] != -1 ) result.pixels[i] = colorEquivalences[labels[i]];
       else result.pixels[i] = color(0,0,0);
     }
     
@@ -228,7 +218,7 @@ void setup() {
   test_img = loadImage("BlobDetection_Test.png");
   img2 = test_img.copy();//make a deep copy
   img2.loadPixels();
-  img2 = blobDetect.findConnectedComponents(test_img, true);
+  img2 = blobDetect.findConnectedComponents(test_img, false);
   img2.updatePixels();//update pixels
 }
 
@@ -236,5 +226,5 @@ void draw() {
   image(test_img, 0, 0);//show image
   
   image(img2, img2.width + 20, 0, img2.width*3, img2.height*3);
-  println(labelsEquivalences);
+  //println(labelsEquivalences);
 }

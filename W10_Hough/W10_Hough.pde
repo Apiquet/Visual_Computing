@@ -51,9 +51,14 @@ class HoughClass{
     return lines;
   }
 }
-
-PImage img;
-img = loadImage("hough_test.bmp");
-
-HoughClass hough = new HoughClass();
-hough.hough(img);
+void settings() {
+  size(800, 600);
+}
+void setup() {
+  PImage img;
+  img = loadImage("hough_test.bmp");
+  
+  HoughClass hough = new HoughClass();
+  List<PVector> hough_list = hough.hough(img);
+  
+}

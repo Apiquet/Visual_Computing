@@ -27,6 +27,13 @@ class HoughClass{
         // accumulator, and increment accordingly the accumulator.
         // Be careful: r may be negative, so you may want to center onto
         // the accumulator: r += rDim / 2
+          for (float i = 0; y < phiDim; i++) {
+            for (float j = -rDim/2; x < rDim/2; j++) {
+              float phi = i*discretizationStepsPhi;
+              float r = j*discretizationStepsR;
+              accumulator[(int) phi * rDim + (int) r] += 1;
+            }
+          }
         }
       }
     }

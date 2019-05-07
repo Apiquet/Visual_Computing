@@ -63,7 +63,7 @@ class BlobDetection {
             }
           }
           else{
-            labels[i] = minLabel;
+            labels[i] = currentLabel;
             currentLabel++;
           }
         }

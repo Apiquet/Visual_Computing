@@ -60,19 +60,21 @@ void draw() {
   img.loadPixels();
   img = blobDetect.findConnectedComponents(img, true);
   img.updatePixels();//update pixels
-     image(img, 0, 0);
+     
 
- /* 
+ 
   // Apply Gaussian Blur
   img.loadPixels();
   img = convolute(img);
   img.updatePixels();
   
+  
   // Apply Edge detection
   img.loadPixels();
   img = scharr(img);
   img.updatePixels();
- 
+ image(img, 0, 0);
+  /*
   // Apply Thresholding up
   img.loadPixels();
   img = threshold_up(img, threshold2);

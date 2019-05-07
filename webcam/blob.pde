@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
+PImage test_img;
+PImage img2;
 List<TreeSet<Integer>> labelsEquivalences= new ArrayList<TreeSet<Integer>>();
 
 class BlobDetection {
@@ -183,7 +185,7 @@ class BlobDetection {
     for(int el = 1; el <= labelsEquivalences.size(); el++){
       labelsEquivalences.get(el-1).add(el);
     }
-    //println(labelsEquivalences);
+    println(labelsEquivalences);
     // Second pass: re-label the pixels by their equivalent class
     for(int el = 0; el < labelsEquivalences.size(); el++){
       for(int i=0; i< input.width*input.height; i++){  
@@ -191,6 +193,10 @@ class BlobDetection {
       }
     }
     // if onlyBiggest==true, count the number of pixels for each label
+    // then output an image with the biggest blob colored in white and the others in black
+
+    PImage result = createImage(input.width, input.height, RGB);
+    
     if(onlyBiggest){
       int blockToKeep = -1;
       int sum1 = 0;
@@ -209,12 +215,16 @@ class BlobDetection {
         if(labels[i] != blockToKeep) labels[i] = -1;
         else labels[i] = 1;
       }
+      for(int i = 0; i < result.width*result.height ; i++){
+        //assuming that all the three channels have the same value
+        if(labels[i] != -1 ) result.pixels[i] = color(255,255,255);
+        else result.pixels[i] = color(0,0,0);
+      }
+      return result;
     }
-    // Finally,
+
     // if onlyBiggest==false, output an image with each blob colored in one uniform color
-    // if onlyBiggest==true, output an image with the biggest blob colored in white and the others in black
     
-    PImage result = createImage(input.width, input.height, RGB);
     
     color[] colorEquivalences = new color[currentLabel];
     for(int c=0; c<currentLabel;c++){
@@ -224,7 +234,6 @@ class BlobDetection {
 
     
     for(int i = 0; i < result.width*result.height ; i++){
-      print(colorEquivalences.length);
       //assuming that all the three channels have the same value
       if(labels[i] != -1 ) result.pixels[i] = colorEquivalences[labels[i]];
       else result.pixels[i] = color(0,0,0);

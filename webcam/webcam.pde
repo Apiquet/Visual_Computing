@@ -1,9 +1,8 @@
 BlobDetection blobDetect = new BlobDetection();
 HoughClass hough = new HoughClass();
-HScrollbar thresholdBar1;
-HScrollbar thresholdBar2;
-float threshold1 = 0;
-float threshold2 = 255;
+HScrollbar thresholdBar1, thresholdBar2, thresholdBarminH,thresholdBarmaxH,thresholdBarminS,thresholdBarmaxS,thresholdBarminB,thresholdBarmaxB;
+float threshold1 = 0, threshold2 = 255, minH, maxH, minS, maxS, minB, maxB;
+
 import processing.video.*;
 Capture cam;
 PImage img, img_accumulator;
@@ -30,8 +29,15 @@ void setup() {
     cam.start();
   }
   
-  thresholdBar1 = new HScrollbar(0, 480-45, 640, 20);
-  thresholdBar2 = new HScrollbar(0, 480-20, 640, 20);
+  //thresholdBar1 = new HScrollbar(0, 480-25, 640, 10);
+  //thresholdBar2 = new HScrollbar(0, 480-10, 640, 10);
+  thresholdBarminH = new HScrollbar(0, 480-10, 640, 10);
+  thresholdBarmaxH = new HScrollbar(0, 480-25, 640, 10);
+  thresholdBarminS = new HScrollbar(0, 480-40, 640, 10);
+  thresholdBarmaxS = new HScrollbar(0, 480-55, 640, 10);
+  thresholdBarminB = new HScrollbar(0, 480-70, 640, 10);
+  thresholdBarmaxB = new HScrollbar(0, 480-85, 640, 10);
+
   //noLoop(); // no interactive behaviour: draw() will be called only once.
 }
 
@@ -39,18 +45,24 @@ void draw() {
   if (cam.available() == true) {
   cam.read();
   }
-  img = cam.get();
-
+  
+  img = loadImage("../W9_BlobDetection/cam_screenshot_lotofnoise.PNG");
+  
+  /*img = cam.get();
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 100, 200, 100, 255, 45, threshold1);
-  img.updatePixels();//update pixels
+  img = thresholdHSB(img, 100.78571, 120.21429, 68.0, 254.59523, 109.28571, 184.57143);
+  img.updatePixels();//update pixels*/
 
-  
+ 
   // Apply Blob detection
   img.loadPixels();
   img = blobDetect.findConnectedComponents(img, true);
   img.updatePixels();//update pixels
+  
+    image(img, 0, 0);
+/*
+
   
   // Apply Gaussian Blur
   img.loadPixels();
@@ -71,15 +83,43 @@ void draw() {
   //hough_list = hough.hough(img);
   //img_accumulator = hough.draw_img();
   
-  image(img, 0, 0);
    
   thresholdBar1.display();
   thresholdBar1.update();
   threshold1 = thresholdBar1.getPos()*255;
   thresholdBar2.display();
   thresholdBar2.update();
-  threshold2 = thresholdBar2.getPos()*255;
+  threshold2 = thresholdBar2.getPos()*255;*/
   
+  thresholdBarminH.display();
+  thresholdBarminH.update();
+  minH = thresholdBarminH.getPos()*255;
+  
+  thresholdBarmaxH.display();
+  thresholdBarmaxH.update();
+  maxH = thresholdBarmaxH.getPos()*255;
+  
+  
+  thresholdBarminS.display();
+  thresholdBarminS.update();
+  minS = thresholdBarminS.getPos()*255;
+  
+  
+  thresholdBarmaxS.display();
+  thresholdBarmaxS.update();
+  maxS = thresholdBarmaxS.getPos()*255;
+  
+  
+  thresholdBarminB.display();
+  thresholdBarminB.update();
+  minB = thresholdBarminB.getPos()*255;
+  
+  
+  thresholdBarmaxB.display();
+  thresholdBarmaxB.update();
+  maxB = thresholdBarmaxB.getPos()*255;
+
+  println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
   //print(imagesEqual(board1Thresholded, board_threshold));
 }
 
@@ -103,7 +143,7 @@ PImage threshold_down(PImage img, float threshold){
   return result;
 }
 
-PImage thresholdHSB(PImage img, int minH, int maxH, int minS, int maxS, int minB, float maxB){
+PImage thresholdHSB(PImage img, float minH, float maxH, float minS, float maxS, float minB, float maxB){
   // create a new, initially transparent, 'result' image
   PImage result = createImage(img.width, img.height, RGB);
   for(int i = 0; i < img.width * img.height; i++) {

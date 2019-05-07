@@ -194,6 +194,10 @@ class BlobDetection {
       }
     }
     // if onlyBiggest==true, count the number of pixels for each label
+    // then output an image with the biggest blob colored in white and the others in black
+
+    PImage result = createImage(input.width, input.height, RGB);
+    
     if(onlyBiggest){
       int blockToKeep = -1;
       int sum1 = 0;
@@ -212,12 +216,15 @@ class BlobDetection {
         if(labels[i] != blockToKeep) labels[i] = -1;
         else labels[i] = 1;
       }
+      for(int i = 0; i < result.width*result.height ; i++){
+        //assuming that all the three channels have the same value
+        if(labels[i] != -1 ) result.pixels[i] = color(255,255,255);
+        else result.pixels[i] = color(0,0,0);
+      }
     }
-    // Finally,
+
     // if onlyBiggest==false, output an image with each blob colored in one uniform color
-    // if onlyBiggest==true, output an image with the biggest blob colored in white and the others in black
     
-    PImage result = createImage(input.width, input.height, RGB);
     
     color[] colorEquivalences = new color[currentLabel];
     for(int c=0; c<currentLabel;c++){
@@ -236,19 +243,19 @@ class BlobDetection {
   }
 }
 void settings() {
-  size(800, 600);
+  size(1555, 600);
 }
 void setup() {
-  test_img = loadImage("BlobDetection_Test.png");
+  test_img = loadImage("cam_screenshot.PNG");
   img2 = test_img.copy();//make a deep copy
   img2.loadPixels();
-  img2 = blobDetect.findConnectedComponents(test_img, false);
+  img2 = blobDetect.findConnectedComponents(test_img, true);
   img2.updatePixels();//update pixels
 }
 
 void draw() {
   image(test_img, 0, 0);//show image
   
-  image(img2, img2.width + 20, 0, img2.width*3, img2.height*3);
+  image(img2, img2.width + 20, 0);
   println(labelsEquivalences);
 }

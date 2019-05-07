@@ -221,6 +221,7 @@ class BlobDetection {
         if(labels[i] != -1 ) result.pixels[i] = color(255,255,255);
         else result.pixels[i] = color(0,0,0);
       }
+      return result;
     }
 
     // if onlyBiggest==false, output an image with each blob colored in one uniform color

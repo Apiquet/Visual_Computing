@@ -62,7 +62,7 @@ class BlobDetection {
             }
           }
           else{
-            labels[i] = minLabel;
+            labels[i] = currentLabel;
             currentLabel++;
           }
         }
@@ -185,7 +185,7 @@ class BlobDetection {
     for(int el = 1; el <= labelsEquivalences.size(); el++){
       labelsEquivalences.get(el-1).add(el);
     }
-    println(labelsEquivalences);
+    //println(labelsEquivalences);
     // Second pass: re-label the pixels by their equivalent class
     for(int el = 0; el < labelsEquivalences.size(); el++){
       for(int i=0; i< input.width*input.height; i++){  

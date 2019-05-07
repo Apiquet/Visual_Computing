@@ -46,24 +46,23 @@ void draw() {
   cam.read();
   }
   
-  img = loadImage("../W9_BlobDetection/cam_screenshot_lotofnoise.PNG");
+  //img = loadImage("../W9_BlobDetection/cam_screenshot.PNG");
   
-  /*img = cam.get();
+  img = cam.get();
   // Apply Color Thresholding
   img.loadPixels();
   img = thresholdHSB(img, 100.78571, 120.21429, 68.0, 254.59523, 109.28571, 184.57143);
-  img.updatePixels();//update pixels*/
+  img.updatePixels();//update pixels
+  
 
- 
+
   // Apply Blob detection
   img.loadPixels();
   img = blobDetect.findConnectedComponents(img, true);
   img.updatePixels();//update pixels
-  
-    image(img, 0, 0);
-/*
+     image(img, 0, 0);
 
-  
+ /* 
   // Apply Gaussian Blur
   img.loadPixels();
   img = convolute(img);
@@ -119,7 +118,7 @@ void draw() {
   thresholdBarmaxB.update();
   maxB = thresholdBarmaxB.getPos()*255;
 
-  println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
+  //println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
   //print(imagesEqual(board1Thresholded, board_threshold));
 }
 

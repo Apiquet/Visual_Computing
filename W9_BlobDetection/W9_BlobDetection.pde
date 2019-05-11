@@ -188,9 +188,13 @@ class BlobDetection {
     }
     println(labelsEquivalences);
     // Second pass: re-label the pixels by their equivalent class
-    for(int el = 0; el < labelsEquivalences.size(); el++){
-      for(int i=0; i< input.width*input.height; i++){  
-        if(labelsEquivalences.get(el).contains(labels[i])) labels[i] = labelsEquivalences.get(el).first();
+    for(int i=0; i< input.width*input.height; i++){ 
+      for(int el = 0; el < labelsEquivalences.size(); el++){
+        if(labels[i] == -1) continue;
+        if(labelsEquivalences.get(el).contains(labels[i]) && labels[i] != labelsEquivalences.get(el).first()){
+          labels[i] = labelsEquivalences.get(el).first();
+          el = -1;
+        }
       }
     }
     // if onlyBiggest==true, count the number of pixels for each label
@@ -247,16 +251,17 @@ void settings() {
   size(1555, 600);
 }
 void setup() {
-  test_img = loadImage("cam_screenshot.PNG");
+  test_img = loadImage("test.PNG");
   img2 = test_img.copy();//make a deep copy
   img2.loadPixels();
-  img2 = blobDetect.findConnectedComponents(test_img, true);
+  img2 = blobDetect.findConnectedComponents(test_img, false);
   img2.updatePixels();//update pixels
+  
+  println(labelsEquivalences);
 }
 
 void draw() {
   image(test_img, 0, 0);//show image
   
   image(img2, img2.width + 20, 0);
-  println(labelsEquivalences);
 }

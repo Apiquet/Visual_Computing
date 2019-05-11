@@ -51,7 +51,7 @@ void draw() {
   img = cam.get();
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 100.78571, 120.21429, 68.0, 254.59523, 109.28571, 184.57143);
+  img = thresholdHSB(img, 66.38096, 131.14287, 24.285715, 91.4762, 64.76191, 220.19048);
   img.updatePixels();//update pixels
   
 
@@ -61,7 +61,8 @@ void draw() {
   img = blobDetect.findConnectedComponents(img, true);
   img.updatePixels();//update pixels
      
-
+image(img, 0, 0);
+  /*
  
   // Apply Gaussian Blur
   img.loadPixels();
@@ -73,8 +74,7 @@ void draw() {
   img.loadPixels();
   img = scharr(img);
   img.updatePixels();
- image(img, 0, 0);
-  /*
+ 
   // Apply Thresholding up
   img.loadPixels();
   img = threshold_up(img, threshold2);
@@ -120,7 +120,7 @@ void draw() {
   thresholdBarmaxB.update();
   maxB = thresholdBarmaxB.getPos()*255;
 
-  //println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
+  println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
   //print(imagesEqual(board1Thresholded, board_threshold));
 }
 

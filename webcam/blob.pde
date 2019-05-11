@@ -187,9 +187,13 @@ class BlobDetection {
     }
     //println(labelsEquivalences);
     // Second pass: re-label the pixels by their equivalent class
-    for(int el = 0; el < labelsEquivalences.size(); el++){
-      for(int i=0; i< input.width*input.height; i++){  
-        if(labelsEquivalences.get(el).contains(labels[i])) labels[i] = labelsEquivalences.get(el).first();
+    for(int i=0; i< input.width*input.height; i++){ 
+      if(labels[i] == -1) continue;
+      for(int el = 0; el < labelsEquivalences.size(); el++){ 
+        if(labelsEquivalences.get(el).contains(labels[i]) && labels[i] != labelsEquivalences.get(el).first()){
+          labels[i] = labelsEquivalences.get(el).first();
+          el = -1;
+        }
       }
     }
     // if onlyBiggest==true, count the number of pixels for each label

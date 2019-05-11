@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.Collections;
 
 BlobDetection blobDetect = new BlobDetection();
 PImage test_img;
@@ -20,7 +21,7 @@ class BlobDetection {
         currentLabel++;
         continue;
       }
-      if(brightness(input.pixels[i]) == 255){
+      else if(brightness(input.pixels[i]) == 255){
         // first line
         if(i < input.width){
           if(labels[i-1] < currentLabel && labels[i-1]>0){
@@ -186,11 +187,12 @@ class BlobDetection {
     for(int el = 1; el <= labelsEquivalences.size(); el++){
       labelsEquivalences.get(el-1).add(el);
     }
-    println(labelsEquivalences);
-    // Second pass: re-label the pixels by their equivalent class
+    
+    
+    // Second pass: re-label the pixels by their equivalent class    
     for(int i=0; i< input.width*input.height; i++){ 
+      if(labels[i] == -1) continue;
       for(int el = 0; el < labelsEquivalences.size(); el++){
-        if(labels[i] == -1) continue;
         if(labelsEquivalences.get(el).contains(labels[i]) && labels[i] != labelsEquivalences.get(el).first()){
           labels[i] = labelsEquivalences.get(el).first();
           el = -1;
@@ -204,32 +206,21 @@ class BlobDetection {
     
     if(onlyBiggest){
       int blockToKeep = -1;
-      int sum1 = 0;
-      int sum2 = 0;
-      for(int label = 1; label < currentLabel; label++){
-        for(int i=0; i< input.width*input.height; i++){  
-          if(labels[i] == label) sum1++;
-        }
-        if(sum2<sum1){
-          sum2 = sum1;
-          blockToKeep = label;
-        }
-        sum1 = 0;
+      List<Integer> sums= new ArrayList<Integer>(Collections.nCopies(currentLabel, 0));
+      for(int i=0; i< input.width*input.height; i++){  
+        if(labels[i] != -1) sums.set(labels[i],sums.get(labels[i])+1);
       }
+      int max=sums.get(0);
+      for (Integer x : sums) if (x>max) max=x;
+      blockToKeep = sums.indexOf(max);
       for(int i=0; i< input.width*input.height; i++){
-        if(labels[i] != blockToKeep) labels[i] = -1;
-        else labels[i] = 1;
-      }
-      for(int i = 0; i < result.width*result.height ; i++){
-        //assuming that all the three channels have the same value
-        if(labels[i] != -1 ) result.pixels[i] = color(255,255,255);
-        else result.pixels[i] = color(0,0,0);
+        if(labels[i] != blockToKeep) result.pixels[i] = color(0,0,0);
+        else result.pixels[i] = color(255,255,255);
       }
       return result;
     }
 
     // if onlyBiggest==false, output an image with each blob colored in one uniform color
-    
     
     color[] colorEquivalences = new color[currentLabel];
     for(int c=0; c<currentLabel;c++){
@@ -237,7 +228,6 @@ class BlobDetection {
       colorEquivalences[c] = randomColor;
     }
 
-    
     for(int i = 0; i < result.width*result.height ; i++){
       //assuming that all the three channels have the same value
       if(labels[i] != -1 ) result.pixels[i] = colorEquivalences[labels[i]];
@@ -251,13 +241,15 @@ void settings() {
   size(1555, 600);
 }
 void setup() {
-  test_img = loadImage("test.PNG");
+  test_img = loadImage("perf_test.PNG");
   img2 = test_img.copy();//make a deep copy
   img2.loadPixels();
-  img2 = blobDetect.findConnectedComponents(test_img, false);
+  float start = millis();
+  img2 = blobDetect.findConnectedComponents(test_img, true);
+  println(millis() - start);
   img2.updatePixels();//update pixels
   
-  println(labelsEquivalences);
+  //println(labelsEquivalences);
 }
 
 void draw() {

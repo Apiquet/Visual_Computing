@@ -51,18 +51,18 @@ void draw() {
   img = cam.get();
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 66.38096, 131.14287, 24.285715, 91.4762, 64.76191, 220.19048);
+  img = thresholdHSB(img, minH, maxH, minS, maxS, minB, maxB);
   img.updatePixels();//update pixels
   
-
+image(img, 0, 0);
+  /*
 
   // Apply Blob detection
   img.loadPixels();
   img = blobDetect.findConnectedComponents(img, true);
   img.updatePixels();//update pixels
      
-image(img, 0, 0);
-  /*
+
  
   // Apply Gaussian Blur
   img.loadPixels();

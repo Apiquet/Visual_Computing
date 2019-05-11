@@ -184,21 +184,28 @@ class BlobDetection {
       }
       else labels[i] = -1;
     }
+    for(int el = 0; el <= currentLabel-labelsEquivalences.size(); el++){
+      labelsEquivalences.add(new TreeSet());
+    }
     for(int el = 1; el <= labelsEquivalences.size(); el++){
       labelsEquivalences.get(el-1).add(el);
     }
     
-    
-    // Second pass: re-label the pixels by their equivalent class    
-    for(int i=0; i< input.width*input.height; i++){ 
-      if(labels[i] == -1) continue;
-      for(int el = 0; el < labelsEquivalences.size(); el++){
-        if(labelsEquivalences.get(el).contains(labels[i]) && labels[i] != labelsEquivalences.get(el).first()){
-          labels[i] = labelsEquivalences.get(el).first();
-          el = -1;
+    for(int i = 0; i < labelsEquivalences.size(); i++){
+      for(int j = 0; j < labelsEquivalences.size(); j++){
+        if(!Collections.disjoint(labelsEquivalences.get(i),labelsEquivalences.get(j))){
+           if(!labelsEquivalences.get(i).contains(labelsEquivalences.get(j).first())) labelsEquivalences.get(i).add(labelsEquivalences.get(j).first());
+           if(!labelsEquivalences.get(j).contains(labelsEquivalences.get(i).first())) labelsEquivalences.get(j).add(labelsEquivalences.get(i).first());
         }
       }
     }
+    
+    
+    // Second pass: re-label the pixels by their equivalent class 
+    for(int i=0; i< input.width*input.height; i++){ 
+      if(labels[i] != -1) labels[i] = labelsEquivalences.get(labels[i]-1).first();
+    }
+    
     // if onlyBiggest==true, count the number of pixels for each label
     // then output an image with the biggest blob colored in white and the others in black
 

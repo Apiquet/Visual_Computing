@@ -50,8 +50,12 @@ void draw() {
   img = cam.get();
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 94.309525, 182.9524, 84.190475, 224.64285, 67.595245, 189.0238);
+  img = thresholdHSB(img, minH, maxH, minS, maxS, minB, maxB);
   img.updatePixels();//update pixels
+ 
+  println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
+  image(img, 0, 0);
+/*  
 
   // Apply Blob detection
   img.loadPixels();
@@ -80,8 +84,7 @@ void draw() {
   hough_list = hough.hough(img);
   img_accumulator = hough.draw_img();
   
- image(img, 0, 0);
-/*  
+
  */
   thresholdUpBar.display();
   thresholdUpBar.update();
@@ -115,8 +118,6 @@ void draw() {
   thresholdBarmaxB.update();
   maxB = thresholdBarmaxB.getPos()*255;
 
-  //println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
-  //print(imagesEqual(board1Thresholded, board_threshold));
 }
 
 PImage threshold_up(PImage img, float threshold){

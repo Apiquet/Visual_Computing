@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.Collections;
 
 PImage test_img;
 PImage img2;
@@ -19,7 +20,7 @@ class BlobDetection {
         currentLabel++;
         continue;
       }
-      if(brightness(input.pixels[i]) == 255){
+      else if(brightness(input.pixels[i]) == 255){
         // first line
         if(i < input.width){
           if(labels[i-1] < currentLabel && labels[i-1]>0){
@@ -182,20 +183,28 @@ class BlobDetection {
       }
       else labels[i] = -1;
     }
+    for(int el = 0; el <= currentLabel-labelsEquivalences.size(); el++){
+      labelsEquivalences.add(new TreeSet());
+    }
     for(int el = 1; el <= labelsEquivalences.size(); el++){
       labelsEquivalences.get(el-1).add(el);
     }
-    //println(labelsEquivalences);
-    // Second pass: re-label the pixels by their equivalent class
-    for(int i=0; i< input.width*input.height; i++){ 
-      if(labels[i] == -1) continue;
-      for(int el = 0; el < labelsEquivalences.size(); el++){ 
-        if(labelsEquivalences.get(el).contains(labels[i]) && labels[i] != labelsEquivalences.get(el).first()){
-          labels[i] = labelsEquivalences.get(el).first();
-          el = -1;
+    
+    for(int i = 0; i < labelsEquivalences.size(); i++){
+      for(int j = 0; j < labelsEquivalences.size(); j++){
+        if(!Collections.disjoint(labelsEquivalences.get(i),labelsEquivalences.get(j))){
+           if(!labelsEquivalences.get(i).contains(labelsEquivalences.get(j).first())) labelsEquivalences.get(i).add(labelsEquivalences.get(j).first());
+           if(!labelsEquivalences.get(j).contains(labelsEquivalences.get(i).first())) labelsEquivalences.get(j).add(labelsEquivalences.get(i).first());
         }
       }
     }
+    
+    
+    // Second pass: re-label the pixels by their equivalent class 
+    for(int i=0; i< input.width*input.height; i++){ 
+      if(labels[i] != -1) labels[i] = labelsEquivalences.get(labels[i]-1).first();
+    }
+    
     // if onlyBiggest==true, count the number of pixels for each label
     // then output an image with the biggest blob colored in white and the others in black
 
@@ -203,32 +212,21 @@ class BlobDetection {
     
     if(onlyBiggest){
       int blockToKeep = -1;
-      int sum1 = 0;
-      int sum2 = 0;
-      for(int label = 1; label < currentLabel; label++){
-        for(int i=0; i< input.width*input.height; i++){  
-          if(labels[i] == label) sum1++;
-        }
-        if(sum2<sum1){
-          sum2 = sum1;
-          blockToKeep = label;
-        }
-        sum1 = 0;
+      List<Integer> sums= new ArrayList<Integer>(Collections.nCopies(currentLabel, 0));
+      for(int i=0; i< input.width*input.height; i++){  
+        if(labels[i] != -1) sums.set(labels[i],sums.get(labels[i])+1);
       }
+      int max=sums.get(0);
+      for (Integer x : sums) if (x>max) max=x;
+      blockToKeep = sums.indexOf(max);
       for(int i=0; i< input.width*input.height; i++){
-        if(labels[i] != blockToKeep) labels[i] = -1;
-        else labels[i] = 1;
-      }
-      for(int i = 0; i < result.width*result.height ; i++){
-        //assuming that all the three channels have the same value
-        if(labels[i] != -1 ) result.pixels[i] = color(255,255,255);
-        else result.pixels[i] = color(0,0,0);
+        if(labels[i] != blockToKeep) result.pixels[i] = color(0,0,0);
+        else result.pixels[i] = color(255,255,255);
       }
       return result;
     }
 
     // if onlyBiggest==false, output an image with each blob colored in one uniform color
-    
     
     color[] colorEquivalences = new color[currentLabel];
     for(int c=0; c<currentLabel;c++){
@@ -236,7 +234,6 @@ class BlobDetection {
       colorEquivalences[c] = randomColor;
     }
 
-    
     for(int i = 0; i < result.width*result.height ; i++){
       //assuming that all the three channels have the same value
       if(labels[i] != -1 ) result.pixels[i] = colorEquivalences[labels[i]];

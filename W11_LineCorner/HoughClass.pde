@@ -10,10 +10,22 @@ class HoughClass{
   int neighbours = 10;
   ArrayList<PVector> lines = new ArrayList<PVector>();
   ArrayList<Integer> bestCandidates = new ArrayList<Integer>();
+  
+  // Pre-computing sin and cos values
+  float[] tabSin = new float[phiDim];
+  float[] tabCos = new float[phiDim];
+  float ang = 0;
+  float inverseR = 1.f / discretizationStepsR;
+  
+  { 
+    for (int accPhi = 0; accPhi < phiDim; ang += discretizationStepsPhi, accPhi++) {
+      tabSin[accPhi] = (float) (Math.sin(ang) * inverseR);
+      tabCos[accPhi] = (float) (Math.cos(ang) * inverseR);
+    }
+  }
 
   ArrayList<PVector> hough(PImage edgeImg, int nLines) {
-    rDim = (int) ((sqrt(edgeImg.width*edgeImg.width +
-    edgeImg.height*edgeImg.height) * 2) / discretizationStepsR +1);
+    rDim = (int) ((sqrt(edgeImg.width*edgeImg.width + edgeImg.height*edgeImg.height) * 2) / discretizationStepsR +1);
     // our accumulator
     accumulator = new int[phiDim * rDim];
     // Fill the accumulator: on edge points (ie, white pixels of the edge
@@ -30,7 +42,7 @@ class HoughClass{
         // the accumulator: r += rDim / 2
           float phi = 0;
           for (int i = 0; i < phiDim; i++) {
-              int r = Math.round( (x * cos(phi) + y * sin(phi)) / discretizationStepsR + rDim / 2);
+              int r = Math.round(x * tabCos[i] + y * tabSin[i] + rDim / 2);
               phi += discretizationStepsPhi;
               accumulator[i * rDim + r] += 1;
             }

@@ -30,12 +30,12 @@ void setup() {
   }
   
   thresholdUpBar = new HScrollbar(0, 480-10, 640, 10);
-  thresholdBarminH = new HScrollbar(0, 480-0, 640, 10);
-  thresholdBarmaxH = new HScrollbar(0, 480-0, 640, 10);
-  thresholdBarminS = new HScrollbar(0, 480-0, 640, 10);
-  thresholdBarmaxS = new HScrollbar(0, 480-0, 640, 10);
-  thresholdBarminB = new HScrollbar(0, 480-0, 640, 10);
-  thresholdBarmaxB = new HScrollbar(0, 480-0, 640, 10);
+  thresholdBarminH = new HScrollbar(0, 480-25, 640, 10);
+  thresholdBarmaxH = new HScrollbar(0, 480-40, 640, 10);
+  thresholdBarminS = new HScrollbar(0, 480-55, 640, 10);
+  thresholdBarmaxS = new HScrollbar(0, 480-70, 640, 10);
+  thresholdBarminB = new HScrollbar(0, 480-85, 640, 10);
+  thresholdBarmaxB = new HScrollbar(0, 480-100, 640, 10);
 
   //noLoop(); // no interactive behaviour: draw() will be called only once.
 }

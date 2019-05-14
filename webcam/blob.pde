@@ -3,13 +3,12 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.Collections;
 
-PImage test_img;
-PImage img2;
-List<TreeSet<Integer>> labelsEquivalences= new ArrayList<TreeSet<Integer>>();
 
 class BlobDetection {
+  
   PImage findConnectedComponents(PImage input, boolean onlyBiggest){
-    // First pass: label the pixels and store labels' equivalences
+     List<TreeSet<Integer>> labelsEquivalences= new ArrayList<TreeSet<Integer>>();
+     // First pass: label the pixels and store labels' equivalences
     int [] labels= new int [input.width*input.height];
     for(int z=0; z<input.width*input.height; z++) labels[z] = -1;
     int currentLabel=1;
@@ -183,7 +182,8 @@ class BlobDetection {
       }
       else labels[i] = -1;
     }
-    for(int el = 0; el <= currentLabel+1000-labelsEquivalences.size(); el++){
+    currentLabel = currentLabel + 1000;
+    for(int el = 0; el <= currentLabel-labelsEquivalences.size(); el++){
       labelsEquivalences.add(new TreeSet());
     }
     for(int el = 1; el <= labelsEquivalences.size(); el++){

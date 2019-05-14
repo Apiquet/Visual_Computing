@@ -1,14 +1,18 @@
+
+import processing.video.*;
+
 BlobDetection blobDetect = new BlobDetection();
 HoughClass hough = new HoughClass();
+
 HScrollbar thresholdUpBar, thresholdBarminH,thresholdBarmaxH,thresholdBarminS,thresholdBarmaxS,thresholdBarminB,thresholdBarmaxB;
 float thresholdUp, minH, maxH, minS, maxS, minB, maxB;
 
-import processing.video.*;
 Capture cam;
-PImage img, img_accumulator;
+PImage img, img_accumulator, img_lines;
+ArrayList<PVector> quad_list;
 
 void settings() {
-size(640, 480);
+size(640+10, 480/2 + 120);
 }
 
 void setup() {
@@ -29,63 +33,20 @@ void setup() {
     cam.start();
   }
   
-  thresholdUpBar = new HScrollbar(0, 480-10, 640, 10);
-  thresholdBarminH = new HScrollbar(0, 480-25, 640, 10);
-  thresholdBarmaxH = new HScrollbar(0, 480-40, 640, 10);
-  thresholdBarminS = new HScrollbar(0, 480-55, 640, 10);
-  thresholdBarmaxS = new HScrollbar(0, 480-70, 640, 10);
-  thresholdBarminB = new HScrollbar(0, 480-85, 640, 10);
-  thresholdBarmaxB = new HScrollbar(0, 480-100, 640, 10);
+  thresholdBarmaxH = new HScrollbar(0, 480/2+10, 640, 10);
+  thresholdBarminH = new HScrollbar(0, 480/2+25, 640, 10);
+  thresholdBarmaxS = new HScrollbar(0, 480/2+40, 640, 10);
+  thresholdBarminS = new HScrollbar(0, 480/2+55, 640, 10);
+  thresholdBarmaxB = new HScrollbar(0, 480/2+70, 640, 10);
+  thresholdBarminB = new HScrollbar(0, 480/2+85, 640, 10);
+  thresholdUpBar = new HScrollbar(0, 480/2+110, 640, 10);
 
   //noLoop(); // no interactive behaviour: draw() will be called only once.
 }
 
 void draw() {
-  if (cam.available() == true) {
-  cam.read();
-  }
   
-  //img = loadImage("../W9_BlobDetection/cam_screenshot.PNG");
-  
-  img = cam.get();
-  // Apply Color Thresholding
-  img.loadPixels();
-  img = thresholdHSB(img, minH, maxH, minS, maxS, minB, maxB);
-  img.updatePixels();//update pixels
- 
-  println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
-  image(img, 0, 0);
-/*  
-
-  // Apply Blob detection
-  img.loadPixels();
-  img = blobDetect.findConnectedComponents(img, true);
-  img.updatePixels();//update pixels
-     
-
-  // Apply Gaussian Blur
-  img.loadPixels();
-  img = convolute(img);
-  img.updatePixels();
-  
-  
-  // Apply Edge detection
-  img.loadPixels();
-  img = scharr(img);
-  img.updatePixels();
- 
-  // Apply Thresholding up
-  img.loadPixels();
-  img = threshold_up(img, thresholdUp);
-  img.updatePixels();//update pixels
-  
- 
-  // Apply Hough transform
-  hough_list = hough.hough(img);
-  img_accumulator = hough.draw_img();
-  
-
- */
+  // threshold bars
   thresholdUpBar.display();
   thresholdUpBar.update();
   thresholdUp = thresholdUpBar.getPos()*255;
@@ -117,6 +78,100 @@ void draw() {
   thresholdBarmaxB.display();
   thresholdBarmaxB.update();
   maxB = thresholdBarmaxB.getPos()*255;
+
+  // verifying cam is available
+  if (cam.available() == true) {
+    cam.read();
+  }
+  else println("Cam not available");
+  
+  //img = loadImage("../W9_BlobDetection/perf_test.PNG");
+  
+  img = cam.get();
+  
+  // Apply Gaussian Blur
+  img.loadPixels();
+  img.filter(BLUR, 1);
+  img.updatePixels();
+
+  // Apply Color Thresholding
+  img.loadPixels();
+  img = thresholdHSB(img, minH, maxH, minS, maxS, minB, maxB);
+  img.updatePixels();//update pixels
+  
+  image(img, 0,0,img.width/2,img.height/2);
+  
+  println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
+  
+  img.loadPixels();
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.updatePixels();
+  
+  
+  img.loadPixels();
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.updatePixels();
+  image(img, img.width/2 + 10,0,img.width/2,img.height/2);
+  
+/*
+    
+  // Apply Blob detection
+  img.loadPixels();
+  img = blobDetect.findConnectedComponents(img, true);
+  img.updatePixels();//update pixels
+    
+  
+  // Apply Edge detection
+  img.loadPixels();
+  img = scharr(img);
+  img.updatePixels();
+ 
+  // Apply Thresholding up
+  img.loadPixels();
+  img = threshold_up(img, thresholdUp);
+  img.updatePixels();//update pixels
+  
+  /*
+  hough_list = hough.hough(img, 7);
+  
+  int max_quad_area = 100;
+  int min_quad_area = 0;
+  quad_list = quad.findBestQuad(hough_list, img.width, img.height, max_quad_area, min_quad_area, true);
+  */
 
 }
 

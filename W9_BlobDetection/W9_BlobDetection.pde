@@ -184,6 +184,7 @@ class BlobDetection {
       }
       else labels[i] = -1;
     }
+    currentLabel = currentLabel +1000;
     for(int el = 0; el <= currentLabel-labelsEquivalences.size(); el++){
       labelsEquivalences.add(new TreeSet());
     }

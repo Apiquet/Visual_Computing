@@ -3,13 +3,12 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.Collections;
 
-PImage test_img;
-PImage img2;
-List<TreeSet<Integer>> labelsEquivalences= new ArrayList<TreeSet<Integer>>();
 
 class BlobDetection {
+  
   PImage findConnectedComponents(PImage input, boolean onlyBiggest){
-    // First pass: label the pixels and store labels' equivalences
+     List<TreeSet<Integer>> labelsEquivalences= new ArrayList<TreeSet<Integer>>();
+     // First pass: label the pixels and store labels' equivalences
     int [] labels= new int [input.width*input.height];
     for(int z=0; z<input.width*input.height; z++) labels[z] = -1;
     int currentLabel=1;
@@ -183,6 +182,7 @@ class BlobDetection {
       }
       else labels[i] = -1;
     }
+    currentLabel = currentLabel + 1000;
     for(int el = 0; el <= currentLabel-labelsEquivalences.size(); el++){
       labelsEquivalences.add(new TreeSet());
     }
@@ -206,7 +206,7 @@ class BlobDetection {
     }
     
     // if onlyBiggest==true, count the number of pixels for each label
-    // then output an image with the biggest blob colored in green and the others in black
+    // then output an image with the biggest blob colored in white and the others in black
 
     PImage result = createImage(input.width, input.height, RGB);
     
@@ -221,7 +221,7 @@ class BlobDetection {
       blockToKeep = sums.indexOf(max);
       for(int i=0; i< input.width*input.height; i++){
         if(labels[i] != blockToKeep) result.pixels[i] = color(0,0,0);
-        else result.pixels[i] = color(100,255,70);
+        else result.pixels[i] = color(255,255,255);
       }
       return result;
     }

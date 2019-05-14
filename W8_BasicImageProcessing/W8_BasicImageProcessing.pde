@@ -6,7 +6,7 @@ HScrollbar thresholdBar2;
 float threshold1 = 0;
 float threshold2 = 255;
 void settings() {
-  size(1600, 1400);
+  size(1200, 300);
 }
 
 void setup() {
@@ -14,20 +14,20 @@ void setup() {
   board = loadImage("board1.jpg");
   board1Thresholded = loadImage("board1Thresholded.bmp");
   
-  thresholdBar1 = new HScrollbar(board.width/2, board.height-45, board.width, 20);
-  thresholdBar2 = new HScrollbar(board.width/2, board.height-20, board.width, 20);
+  thresholdBar1 = new HScrollbar(0, board.height/2-45, board.width/2, 20);
+  thresholdBar2 = new HScrollbar(0, board.height/2-20, board.width/2, 20);
   //noLoop(); // no interactive behaviour: draw() will be called only once.
 }
 
 void draw() {
-  image(board, board.width/2, 0);//show image
+  image(board, 0, 0, board.width/2, board.height/2);//show image
   
   // Apply Color Thresholding
   PImage board_threshold = board.copy();//make a deep copy
   board_threshold.loadPixels();
   board_threshold = thresholdHSB(board_threshold, 100, 200, 100, 255, 45, threshold1);
   board_threshold.updatePixels();//update pixels
-  image(board_threshold, 0, board.height);
+  image(board_threshold, board.width/2, 0, board.width/2, board.height/2);
   
   // Apply Gaussian Blur
   PImage board_gaussian = board_threshold.copy();
@@ -46,7 +46,7 @@ void draw() {
   board_edge_th.loadPixels();
   board_edge_th = threshold_up(board_edge_th, threshold2);
   board_edge_th.updatePixels();//update pixels
-  image(board_edge_th, board.width, board.height);
+  image(board_edge_th, board.width, 0, board.width/2, board.height/2);
    
    
   //PImage img3 = nao.copy();//make a deep copy

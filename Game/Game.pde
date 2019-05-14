@@ -56,7 +56,7 @@ void draw(){
   hs.display();
 }
 
-void drawBarChart(){
+void drawBarChart() {
   barChart.beginDraw();
   barChart.background(200);
   barChart.noStroke();
@@ -160,6 +160,16 @@ void updating_scene_shiftON() {
   //if the user then click on another postion, we replace x and y 
   if(clicks_shiftEnabled.size()>0) 
     displaying_cylinder_shiftON();
+
+  gameSurface.pushMatrix();
+  //displaying the ball
+  float x = (mover.location.x + box_size - 5*cylinderBaseSize);
+  float y = (mover.location.z + box_size - 5*cylinderBaseSize) - 200;
+  gameSurface.fill(100);
+  gameSurface.stroke(10);
+  gameSurface.ellipse(x, box_size-y, 20, 20);
+  gameSurface.popMatrix();
+  
   gameSurface.pushMatrix();
   //displaying a cylinder on the mouse position
   gameSurface.translate(mouseX, mouseY+50, 0);
@@ -202,11 +212,13 @@ void updating_scene_shiftOFF() {
   creating_plate();
   mover.update(rx, rz);
   mover.checkEdges(box_size/2);
-  if(scores.size() == 0) {
-    scores.add(mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize));
-  }
-  else {
-  scores.add(scores.get(scores.size()-1) + mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize));
+  if (!user_won) {
+    if(scores.size() == 0) {
+      scores.add(mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize));
+    }
+    else {
+    scores.add(scores.get(scores.size()-1) + mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize));
+    }
   }
   displaying_mover();
   gameSurface.popMatrix();
@@ -384,16 +396,20 @@ Let user setting robotnik position
 void mouseClicked() {
   //verifying the user clicked on the plate
   if(shiftIsPressed && mouseX < box_size + (width-box_size)/2 && mouseY+50 < box_size + (height-box_size)/2 && mouseX > (width-box_size)/2 && mouseY+50 > (height-box_size)/2) { 
-    //clear the ArrayLists to add new position for Robotnik
-    clicks_shiftDisabled.clear();
-    clicks_shiftEnabled.clear();
-    if(clicks_shiftDisabled.size()==0) {
-      //adding position of cylinder in SHIFT ON mode and in game mode
-      clicks_shiftEnabled.add( new PVector( mouseX, mouseY+50, 0 ) );
-      particle_origin = new PVector( mouseX - box_size + 5*cylinderBaseSize, 0, mouseY+50 - box_size + 5*cylinderBaseSize );
-      clicks_shiftDisabled.add(particle_origin);
-      ParticleSystem = new ParticleSystem(particle_origin);
-      particle_ON = true;
+    float x = (mover.location.x + box_size - 5*cylinderBaseSize);
+    float y = (mover.location.z + box_size - 5*cylinderBaseSize);
+    if(dist(mouseX, mouseY+50, x, y) > 25) {
+      //clear the ArrayLists to add new position for Robotnik
+      clicks_shiftDisabled.clear();
+      clicks_shiftEnabled.clear();
+      if(clicks_shiftDisabled.size()==0) {
+        //adding position of cylinder in SHIFT ON mode and in game mode
+        clicks_shiftEnabled.add( new PVector( mouseX, mouseY+50, 0 ) );
+        particle_origin = new PVector( mouseX - box_size + 5*cylinderBaseSize, 0, mouseY+50 - box_size + 5*cylinderBaseSize );
+        clicks_shiftDisabled.add(particle_origin);
+        ParticleSystem = new ParticleSystem(particle_origin);
+        particle_ON = true;
+      }
     }
   }
 }

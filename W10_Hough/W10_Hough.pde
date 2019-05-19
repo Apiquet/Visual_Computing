@@ -99,7 +99,7 @@ class HoughClass{
   PImage draw_img(){
     PImage houghImg = createImage(rDim, phiDim, ALPHA);
     for (int i = 0; i < accumulator.length; i++) {
-    houghImg.pixels[i] = color(min(255, accumulator[i]));
+      houghImg.pixels[i] = color(min(255, accumulator[i]));
     }
     // You may want to resize the accumulator to make it easier to see:
     houghImg.resize(400, 400);
@@ -107,18 +107,21 @@ class HoughClass{
     return houghImg;
   }
 }
+
+
 void settings() {
   size(1300, 600);
 }
+
 void setup() {  
   img = loadImage("hough_test.bmp");
-  image(img, 0,0,img.width,img.height);
+  image(img, 0, 0, img.width, img.height);
   hough_list = hough.hough(img);
-  img_accumulator = hough.draw_img();    
+  //img_accumulator = hough.draw_img();    
 }
 
 void draw() {  
   
-  image(img_accumulator, img_accumulator.width*1.8,0);
+  //image(img_accumulator, img_accumulator.width*1.8,0);
 
 }

@@ -1,7 +1,7 @@
 class HoughClass{
   float discretizationStepsPhi = 0.06f; 
   float discretizationStepsR = 2.5f; 
-  int minVotes = 200; 
+  int minVotes = 20; 
   // dimensions of the accumulator
   int phiDim = (int) (Math.PI / discretizationStepsPhi +1);
   //The max radius is the image diagonal, but it can be also negative
@@ -40,10 +40,8 @@ class HoughClass{
         // accumulator, and increment accordingly the accumulator.
         // Be careful: r may be negative, so you may want to center onto
         // the accumulator: r += rDim / 2
-          float phi = 0;
           for (int i = 0; i < phiDim; i++) {
               int r = Math.round(x * tabCos[i] + y * tabSin[i] + rDim / 2);
-              phi += discretizationStepsPhi;
               accumulator[i * rDim + r] += 1;
             }
           }

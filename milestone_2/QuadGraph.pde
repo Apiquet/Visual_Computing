@@ -304,7 +304,6 @@ class QuadGraph {
     float i4=c4.cross(c1).z;
 
     float area = Math.abs(0.5f * (i1 + i2 + i3 + i4));
-
     
     if (area < max_area && area > min_area){
       return area;

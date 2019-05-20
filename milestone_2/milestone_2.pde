@@ -1,6 +1,6 @@
 HScrollbar thresholdUpBar, thresholdBarminH,thresholdBarmaxH,thresholdBarminS,thresholdBarmaxS,thresholdBarminB,thresholdBarmaxB;
 float thresholdUp, minH, maxH, minS, maxS, minB, maxB;
-PImage img, img_2, img_3, img_4, img_blob, img_edge;
+PImage img, img_2, img_3, img_4, img_blob, img_edge, img_filter;
 ArrayList<PVector> hough_list, quad_list;
 
 // good filter values: 56.487343, 139.76582, 65.20253, 255.0, 41.316456, 146.8671
@@ -30,30 +30,18 @@ void setup() {
   img = pipeline(img, 56.487343, 139.76582, 65.20253, 255.0, 41.316456, 146.8671);
 
   // Apply Blob detection
-  img.loadPixels();
   img_blob = blobDetect.findConnectedComponents(img, true);
-  img_blob.updatePixels();//update pixels
-  image(img_blob, 2*img_blob.width/3, 0, img_blob.width/3, img_blob.height/3);
- 
+  
    // Apply blur filter
-  img_blob.loadPixels();
-  img_blob.filter(BLUR,2);
-  img_blob.updatePixels();
+  img_filter = img_blob.copy();
+  img_filter.filter(BLUR,2);
   
   // Apply Edge detection
-  img_blob.loadPixels();
-  img_edge = scharr(img_blob);
-  img_edge.updatePixels();
+  img_edge = scharr(img_filter);
  
   // Apply Thresholding up
-  img_edge.loadPixels();
   img_edge = threshold_up(img_edge, 100);
-  img_edge.updatePixels();//update pixels
-  
   img_edge.resize(img_edge.width/3, img_edge.height/3);
-  img_edge.updatePixels();
-  
-  image(img_edge, img_edge.width, 0);
   
 //TODO resize the hough line to fit the output image
 
@@ -69,6 +57,10 @@ void setup() {
     ellipse(quad.x, quad.y, 20, 20);
     popMatrix();
   }
+  
+  image(img_edge, img.width/3, 0);
+  image(img_blob, 2*img.width/3, 0, img.width/3, img.height/3);
+
 }
 
 void draw() {

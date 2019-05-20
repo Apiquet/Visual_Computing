@@ -52,7 +52,7 @@ void setup() {
   for(int i = 0; i < quad_list.size(); ++i){
     pushMatrix();
     stroke(0);
-    fill(random(255), random(255), random(255), 70);
+    fill(random(255), random(255), random(255), random(255));
     PVector quad = quad_list.get(i);
     ellipse(quad.x, quad.y, 20, 20);
     popMatrix();

@@ -25,7 +25,7 @@ void setup() {
   thresholdBarminB = new HScrollbar(0, 700-85, 800, 10);
   thresholdBarmaxB = new HScrollbar(0, 700-100, 800, 10);
  */
-  img = loadImage("board4.jpg");
+  img = loadImage("board1.jpg");
   image(img, 0,0,img.width/3,img.height/3);
   img = pipeline(img, 56.487343, 139.76582, 65.20253, 255.0, 41.316456, 146.8671);
 
@@ -62,8 +62,12 @@ void setup() {
   int min_quad_area = 0;
   quad_list = quad.findBestQuad(hough_list, img_edge.width, img_edge.height, max_quad_area, min_quad_area, true);
   for(int i = 0; i < quad_list.size(); ++i){
+    pushMatrix();
+    stroke(0);
+    fill(random(255), random(255), random(255), 70);
     PVector quad = quad_list.get(i);
-    ellipse(quad.x, quad.y, 10, 10);
+    ellipse(quad.x, quad.y, 20, 20);
+    popMatrix();
   }
 }
 

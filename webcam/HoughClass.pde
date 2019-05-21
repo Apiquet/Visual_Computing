@@ -1,7 +1,7 @@
 class HoughClass{
   float discretizationStepsPhi = 0.06f; 
   float discretizationStepsR = 2.5f; 
-  int minVotes = 20; 
+  int minVotes = 10; 
   // dimensions of the accumulator
   int phiDim = (int) (Math.PI / discretizationStepsPhi +1);
   //The max radius is the image diagonal, but it can be also negative
@@ -82,7 +82,7 @@ class HoughClass{
       lines.add(new PVector(r,phi));
     }
    
-    /*
+    
     for (int idx = 0; idx < lines.size(); idx++) {
         PVector line=lines.get(idx);
         float r = line.x;
@@ -122,7 +122,7 @@ class HoughClass{
             line(x2, y2, x3, y3);
         }
       }
-      */
+      
     return lines;
   }
   

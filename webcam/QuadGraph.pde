@@ -318,7 +318,7 @@ class QuadGraph {
   boolean nonFlatQuad(PVector c1, PVector c2, PVector c3, PVector c4) {
 
     // cos(70deg) ~= 0.3
-    float min_cos = 0.5f;
+    float min_cos = 0.8f;
 
     PVector v21= PVector.sub(c1, c2);
     PVector v32= PVector.sub(c2, c3);
@@ -329,7 +329,6 @@ class QuadGraph {
     float cos2=Math.abs(v32.dot(v43) / (v32.mag() * v43.mag()));
     float cos3=Math.abs(v43.dot(v14) / (v43.mag() * v14.mag()));
     float cos4=Math.abs(v14.dot(v21) / (v14.mag() * v21.mag()));
-
     if (cos1 < min_cos && cos2 < min_cos && cos3 < min_cos && cos4 < min_cos)
       return true;
     else {

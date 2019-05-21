@@ -98,7 +98,7 @@ void draw() {
 
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 17.404762, 131.9524, 108.47619, 255.0, 0.0, 247.30951);
+  img = thresholdHSB(img, 39.666668, 132.76192, 0.0, 199.5476, 0.0, 247.71428);
   img.updatePixels();//update pixels
   
   
@@ -162,19 +162,23 @@ void draw() {
   img = threshold_up(img, thresholdUp);
   img.updatePixels();//update pixels
 
+  image(img, 0, 0);
   hough_list = hough.hough(img, 5);
-  int max_quad_area = 10000;
+  int max_quad_area = img.width*img.height;
   int min_quad_area = 0;
   quad_list = quad.findBestQuad(hough_list, img.width, img.height, max_quad_area, min_quad_area, true);
+  print(quad_list);
+  print(hough_list.size());
+
   for(int i = 0; i < quad_list.size(); ++i){
     pushMatrix();
     stroke(0);
-    image(img, 0, 0);
     fill(random(255), random(255), random(255), random(255));
     PVector quad = quad_list.get(i);
     ellipse(quad.x, quad.y, 20, 20);
     popMatrix();
   }
+
 /* 
   */
 

@@ -77,8 +77,8 @@ void draw() {
   
   thresholdBarmaxB.display();
   thresholdBarmaxB.update();
-  maxB = thresholdBarmaxB.getPos()*255;
-  */
+  maxB = thresholdBarmaxB.getPos()*255;*/
+  
   
   // verifying cam is available
   if (cam.available() == true) {
@@ -97,27 +97,19 @@ void draw() {
 
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 90.26191, 255.0, 78.11905, 255.0, 53.02381, 238.0);
+  img = thresholdHSB(img, 44.928574, 237.59523, 35.214287, 252.57143, 0.0, 255.0);
   img.updatePixels();//update pixels
   
+  //image(img, 0, 0, img.width/2,img.height/2);
+
   
   //println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
   
   img.loadPixels();
-  img.filter(ERODE);
-  img.filter(ERODE);
-  img.filter(ERODE);
-  img.filter(ERODE);
-  img.filter(ERODE);
-  img.filter(ERODE);
+  /*img.filter(ERODE);
   img.filter(ERODE);
   img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
+  img.filter(DILATE);*/
   img.updatePixels();
   
   
@@ -126,20 +118,6 @@ void draw() {
   img.filter(DILATE);
   img.filter(DILATE);
   img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(DILATE);
-  img.filter(ERODE);
-  img.filter(ERODE);
-  img.filter(ERODE);
-  img.filter(ERODE);
-  img.filter(ERODE);
-  img.filter(ERODE);
-  img.filter(ERODE);
   img.filter(ERODE);
   img.filter(ERODE);
   img.filter(ERODE);
@@ -161,13 +139,14 @@ void draw() {
   img = threshold_up(img, thresholdUp);
   img.updatePixels();//update pixels
 
-  image(img, 0, 0);
-  hough_list = hough.hough(img, 7);
+  
+  hough_list = hough.hough(img, 6);
   int max_quad_area = img.width*img.height;
   int min_quad_area = 0;
   quad_list = quad.findBestQuad(hough_list, img.width, img.height, max_quad_area, min_quad_area, true);
-  print(quad_list);
-  print(hough_list.size());
+  //print(quad_list);
+  //print(hough_list.size());
+  image(img, 0,0);
 
   for(int i = 0; i < quad_list.size(); ++i){
     pushMatrix();
@@ -177,6 +156,9 @@ void draw() {
     ellipse(quad.x, quad.y, 20, 20);
     popMatrix();
   }
+  //image(img, img.width/2, 0, img.width/2,img.height/2);
+/*
+  */
 }
 
 PImage threshold_up(PImage img, float threshold){

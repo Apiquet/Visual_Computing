@@ -1,21 +1,31 @@
-import java.util.ArrayList;
-import java.util.List;
-List<PVector> hough_list;
-
 class HoughClass{
   float discretizationStepsPhi = 0.06f; 
   float discretizationStepsR = 2.5f; 
-  int minVotes=200; 
+  int minVotes = 20; 
   // dimensions of the accumulator
   int phiDim = (int) (Math.PI / discretizationStepsPhi +1);
   //The max radius is the image diagonal, but it can be also negative
   int rDim = 0;
   int[] accumulator;
-  ArrayList<PVector> lines=new ArrayList<PVector>();
+  int neighbours = 10;
+  ArrayList<PVector> lines = new ArrayList<PVector>();
+  ArrayList<Integer> bestCandidates = new ArrayList<Integer>();
+  
+  // Pre-computing sin and cos values
+  float[] tabSin = new float[phiDim];
+  float[] tabCos = new float[phiDim];
+  float ang = 0;
+  float inverseR = 1.f / discretizationStepsR;
+  
+  { 
+    for (int accPhi = 0; accPhi < phiDim; ang += discretizationStepsPhi, accPhi++) {
+      tabSin[accPhi] = (float) (Math.sin(ang) * inverseR);
+      tabCos[accPhi] = (float) (Math.cos(ang) * inverseR);
+    }
+  }
 
-  List<PVector> hough(PImage edgeImg){
-    rDim = (int) ((sqrt(edgeImg.width*edgeImg.width +
-    edgeImg.height*edgeImg.height) * 2) / discretizationStepsR +1);
+  ArrayList<PVector> hough(PImage edgeImg, int nLines) {
+    rDim = (int) ((sqrt(edgeImg.width*edgeImg.width + edgeImg.height*edgeImg.height) * 2) / discretizationStepsR +1);
     // our accumulator
     accumulator = new int[phiDim * rDim];
     // Fill the accumulator: on edge points (ie, white pixels of the edge
@@ -30,26 +40,44 @@ class HoughClass{
         // accumulator, and increment accordingly the accumulator.
         // Be careful: r may be negative, so you may want to center onto
         // the accumulator: r += rDim / 2
-          float phi = 0;
           for (int i = 0; i < phiDim; i++) {
-              int r = Math.round( (x * cos(phi) + y * sin(phi)) / discretizationStepsR + rDim / 2);
-              phi += discretizationStepsPhi;
-
+              int r = Math.round(x * tabCos[i] + y * tabSin[i] + rDim / 2);
               accumulator[i * rDim + r] += 1;
             }
           }
       }
     }
+    
     for (int idx = 0; idx < accumulator.length; idx++) {
       if (accumulator[idx] > minVotes) {
-      // first, compute back the (r, phi) polar coordinates:
-      int accPhi = (int) (idx / (rDim));
+        int start  = Math.max(idx - neighbours, 0);
+        int end = Math.min(idx + neighbours, accumulator.length);
+        boolean flag = true;
+        for (int it = start; it < end; ++it) {
+          if (accumulator[idx] < accumulator[it]) {
+            flag = false;
+            break;
+          }
+        }
+        if(flag) {
+          bestCandidates.add(idx);
+        }
+      }
+    }
+    
+    Collections.sort(bestCandidates, new HoughComparator(accumulator));
+    if(bestCandidates.size() == 0){
+        return new ArrayList<PVector>();
+    }
+    for (int n = 0; n < nLines; n++) {
+      int idx = bestCandidates.get(n);
+      int accPhi = (idx / (rDim));
       int accR = idx - (accPhi) * (rDim);
       float r = (accR - (rDim) * 0.5f) * discretizationStepsR;
       float phi = accPhi * discretizationStepsPhi;
       lines.add(new PVector(r,phi));
-      }
     }
+    
     for (int idx = 0; idx < lines.size(); idx++) {
         PVector line=lines.get(idx);
         float r = line.x;
@@ -71,34 +99,49 @@ class HoughClass{
         // Finally, plot the lines
         stroke(204,102,0);
         if (y0 > 0) {
-        if (x1 > 0)
-        line(x0, y0, x1, y1);
-        else if (y2 > 0)
-        line(x0, y0, x2, y2);
-        else
-        line(x0, y0, x3, y3);
+          if (x1 > 0)
+            line(x0, y0, x1, y1);
+          else if (y2 > 0)
+            line(x0, y0, x2, y2);
+          else
+            line(x0, y0, x3, y3);
         }
         else {
-        if (x1 > 0) {
-        if (y2 > 0)
-        line(x1, y1, x2, y2);
-        else
-        line(x1, y1, x3, y3);
+          if (x1 > 0) {
+            if (y2 > 0)
+              line(x1, y1, x2, y2);
+            else
+              line(x1, y1, x3, y3);
+          }
+          else
+            line(x2, y2, x3, y3);
         }
-        else
-        line(x2, y2, x3, y3);
-        }}
+      }
     return lines;
   }
   
   PImage draw_img(){
     PImage houghImg = createImage(rDim, phiDim, ALPHA);
     for (int i = 0; i < accumulator.length; i++) {
-    houghImg.pixels[i] = color(min(255, accumulator[i]));
+      houghImg.pixels[i] = color(min(255, accumulator[i]));
     }
     // You may want to resize the accumulator to make it easier to see:
-    //houghImg.resize(400, 400);
+    houghImg.resize(400, 400);
     houghImg.updatePixels();
     return houghImg;
   }
+}
+
+
+class HoughComparator implements java.util.Comparator<Integer> { 
+  int[] accumulator;
+  
+  public HoughComparator(int[] accumulator) {
+    this.accumulator = accumulator; 
+  }
+  @Override
+  public int compare(Integer l1, Integer l2) { 
+    if (accumulator[l1] > accumulator[l2] || (accumulator[l1] == accumulator[l2] && l1 < l2)) return -1; 
+    return 1;
+  } 
 }

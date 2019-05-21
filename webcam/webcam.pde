@@ -3,13 +3,14 @@ import processing.video.*;
 
 BlobDetection blobDetect = new BlobDetection();
 HoughClass hough = new HoughClass();
+QuadGraph quad = new QuadGraph();
 
 HScrollbar thresholdUpBar, thresholdBarminH,thresholdBarmaxH,thresholdBarminS,thresholdBarmaxS,thresholdBarminB,thresholdBarmaxB;
 float thresholdUp, minH, maxH, minS, maxS, minB, maxB;
 
 Capture cam;
-PImage img, img_accumulator, img_lines;
-ArrayList<PVector> quad_list;
+PImage img, img_accumulator, img_lines, img_edge;
+ArrayList<PVector> hough_list, quad_list;
 
 void settings() {
 size(640+10, 480/2 + 120);
@@ -88,7 +89,7 @@ void draw() {
   //img = loadImage("../W9_BlobDetection/perf_test.PNG");
   
   img = cam.get();
-  
+
   // Apply Gaussian Blur
   img.loadPixels();
   img.filter(BLUR, 1);
@@ -96,12 +97,11 @@ void draw() {
 
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, minH, maxH, minS, maxS, minB, maxB);
+  img = thresholdHSB(img, 39.666668, 132.76192, 0.0, 199.5476, 0.0, 247.71428);
   img.updatePixels();//update pixels
   
-  image(img, 0,0,img.width/2,img.height/2);
   
-  println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
+  //println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
   
   img.loadPixels();
   img.filter(ERODE);
@@ -145,9 +145,7 @@ void draw() {
   img.filter(ERODE);
   img.filter(ERODE);
   img.updatePixels();
-  image(img, img.width/2 + 10,0,img.width/2,img.height/2);
   
-/*
     
   // Apply Blob detection
   img.loadPixels();
@@ -164,13 +162,24 @@ void draw() {
   img.loadPixels();
   img = threshold_up(img, thresholdUp);
   img.updatePixels();//update pixels
-  
-  /*
-  hough_list = hough.hough(img, 7);
-  
-  int max_quad_area = 100;
+    
+  image(img, 0,0,img.width/2,img.height/2);
+
+
+  hough_list = hough.hough(img, 5);
+  int max_quad_area = 100000;
   int min_quad_area = 0;
   quad_list = quad.findBestQuad(hough_list, img.width, img.height, max_quad_area, min_quad_area, true);
+  for(int i = 0; i < quad_list.size(); ++i){
+    pushMatrix();
+    stroke(0);
+    fill(random(255), random(255), random(255), random(255));
+    PVector quad = quad_list.get(i);
+    ellipse(quad.x, quad.y, 20, 20);
+    popMatrix();
+  }
+   image(img, img.width/2 + 10,0,img.width/2,img.height/2);
+/* 
   */
 
 }

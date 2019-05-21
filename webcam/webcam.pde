@@ -33,7 +33,6 @@ void setup() {
     cam = new Capture(this, 640,480,cameras[0]);
     cam.start();
   }
-  
   /*
   thresholdBarmaxH = new HScrollbar(0, 480/2+10, 640, 10);
   thresholdBarminH = new HScrollbar(0, 480/2+25, 640, 10);
@@ -80,7 +79,7 @@ void draw() {
   thresholdBarmaxB.update();
   maxB = thresholdBarmaxB.getPos()*255;
   */
-
+  
   // verifying cam is available
   if (cam.available() == true) {
     cam.read();
@@ -98,7 +97,7 @@ void draw() {
 
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 39.666668, 132.76192, 0.0, 199.5476, 0.0, 247.71428);
+  img = thresholdHSB(img, 90.26191, 255.0, 78.11905, 255.0, 53.02381, 238.0);
   img.updatePixels();//update pixels
   
   
@@ -146,7 +145,7 @@ void draw() {
   img.filter(ERODE);
   img.filter(ERODE);
   img.updatePixels();
-    
+  
   // Apply Blob detection
   img.loadPixels();
   img = blobDetect.findConnectedComponents(img, true);
@@ -163,7 +162,7 @@ void draw() {
   img.updatePixels();//update pixels
 
   image(img, 0, 0);
-  hough_list = hough.hough(img, 5);
+  hough_list = hough.hough(img, 7);
   int max_quad_area = img.width*img.height;
   int min_quad_area = 0;
   quad_list = quad.findBestQuad(hough_list, img.width, img.height, max_quad_area, min_quad_area, true);
@@ -178,10 +177,6 @@ void draw() {
     ellipse(quad.x, quad.y, 20, 20);
     popMatrix();
   }
-
-/* 
-  */
-
 }
 
 PImage threshold_up(PImage img, float threshold){

@@ -34,6 +34,7 @@ void setup() {
     cam.start();
   }
   
+  /*
   thresholdBarmaxH = new HScrollbar(0, 480/2+10, 640, 10);
   thresholdBarminH = new HScrollbar(0, 480/2+25, 640, 10);
   thresholdBarmaxS = new HScrollbar(0, 480/2+40, 640, 10);
@@ -41,12 +42,11 @@ void setup() {
   thresholdBarmaxB = new HScrollbar(0, 480/2+70, 640, 10);
   thresholdBarminB = new HScrollbar(0, 480/2+85, 640, 10);
   thresholdUpBar = new HScrollbar(0, 480/2+110, 640, 10);
-
-  //noLoop(); // no interactive behaviour: draw() will be called only once.
+  */
 }
 
 void draw() {
-  
+  /*
   // threshold bars
   thresholdUpBar.display();
   thresholdUpBar.update();
@@ -79,6 +79,7 @@ void draw() {
   thresholdBarmaxB.display();
   thresholdBarmaxB.update();
   maxB = thresholdBarmaxB.getPos()*255;
+  */
 
   // verifying cam is available
   if (cam.available() == true) {
@@ -97,7 +98,7 @@ void draw() {
 
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 39.666668, 132.76192, 0.0, 199.5476, 0.0, 247.71428);
+  img = thresholdHSB(img, 17.404762, 131.9524, 108.47619, 255.0, 0.0, 247.30951);
   img.updatePixels();//update pixels
   
   
@@ -145,13 +146,11 @@ void draw() {
   img.filter(ERODE);
   img.filter(ERODE);
   img.updatePixels();
-  
     
   // Apply Blob detection
   img.loadPixels();
   img = blobDetect.findConnectedComponents(img, true);
   img.updatePixels();//update pixels
-    
   
   // Apply Edge detection
   img.loadPixels();
@@ -162,23 +161,20 @@ void draw() {
   img.loadPixels();
   img = threshold_up(img, thresholdUp);
   img.updatePixels();//update pixels
-    
-  image(img, 0,0,img.width/2,img.height/2);
-
 
   hough_list = hough.hough(img, 5);
-  int max_quad_area = 100000;
+  int max_quad_area = 10000;
   int min_quad_area = 0;
   quad_list = quad.findBestQuad(hough_list, img.width, img.height, max_quad_area, min_quad_area, true);
   for(int i = 0; i < quad_list.size(); ++i){
     pushMatrix();
     stroke(0);
+    image(img, 0, 0);
     fill(random(255), random(255), random(255), random(255));
     PVector quad = quad_list.get(i);
     ellipse(quad.x, quad.y, 20, 20);
     popMatrix();
   }
-   image(img, img.width/2 + 10,0,img.width/2,img.height/2);
 /* 
   */
 

@@ -125,7 +125,7 @@ class QuadGraph {
         for (int i = 1; i < cy.length; i++) {
           s += "," + cy[i];
         }
-        System.out.println(s);
+        //System.out.println(s);
       }
     }
   }

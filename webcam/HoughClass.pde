@@ -25,6 +25,10 @@ class HoughClass{
   }
 
   ArrayList<PVector> hough(PImage edgeImg, int nLines) {
+    
+    ArrayList<PVector> lines = new ArrayList<PVector>();
+    ArrayList<Integer> bestCandidates = new ArrayList<Integer>();
+    
     rDim = (int) ((sqrt(edgeImg.width*edgeImg.width + edgeImg.height*edgeImg.height) * 2) / discretizationStepsR +1);
     // our accumulator
     accumulator = new int[phiDim * rDim];
@@ -66,8 +70,8 @@ class HoughClass{
     }
     
     Collections.sort(bestCandidates, new HoughComparator(accumulator));
-    if(bestCandidates.size() == 0){
-        return new ArrayList<PVector>();
+    if(bestCandidates.size() < nLines){
+        return lines;
     }
     for (int n = 0; n < nLines; n++) {
       int idx = bestCandidates.get(n);
@@ -77,7 +81,8 @@ class HoughClass{
       float phi = accPhi * discretizationStepsPhi;
       lines.add(new PVector(r,phi));
     }
-    
+   
+    /*
     for (int idx = 0; idx < lines.size(); idx++) {
         PVector line=lines.get(idx);
         float r = line.x;
@@ -117,6 +122,7 @@ class HoughClass{
             line(x2, y2, x3, y3);
         }
       }
+      */
     return lines;
   }
   

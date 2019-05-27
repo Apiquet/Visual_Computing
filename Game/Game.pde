@@ -395,10 +395,10 @@ Let user setting robotnik position
 */
 void mouseClicked() {
   //verifying the user clicked on the plate
-  if(shiftIsPressed && mouseX < box_size + (width-box_size)/2 && mouseY+50 < box_size + (height-box_size)/2 && mouseX > (width-box_size)/2 && mouseY+50 > (height-box_size)/2) { 
-    float x = (mover.location.x + box_size - 5*cylinderBaseSize);
-    float y = (mover.location.z + box_size - 5*cylinderBaseSize);
-    if(dist(mouseX, mouseY+50, x, y) > 25) {
+  if(shiftIsPressed && mouseX < 400 && mouseY+50 < 400 && mouseX > 100 && mouseY+50 > 100) { 
+    float x = (mover.location.x + 250);
+    float y = (-mover.location.z + 250);
+    if(dist(mouseX, mouseY+50, x, y) > 20) {
       //clear the ArrayLists to add new position for Robotnik
       clicks_shiftDisabled.clear();
       clicks_shiftEnabled.clear();

@@ -4,7 +4,7 @@ Global Variables
 Mover mover;
 ParticleSystem ParticleSystem;
 HScrollbar hs;
-float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 10, cylinderBaseSize = 10, cylinderHeight = 20;
+float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 5, cylinderBaseSize = 10, cylinderHeight = 20;
 boolean shiftIsPressed = false, user_won = false, was_clicked = false, particle_ON = false;
 int cylinderResolution = 40;
 ArrayList<PVector> clicks_shiftEnabled = new ArrayList(), clicks_shiftDisabled = new ArrayList();
@@ -194,7 +194,7 @@ void updating_scene_shiftOFF() {
     displaying_robotnik();
   //if the user clicked on the plate in SHIFT ON mode, we start to add particles
   if(particle_ON) {
-    if(frameCount % 20 == 0 && !user_won) {
+    if(frameCount % 60 == 0 && !user_won) {
       ParticleSystem.addParticle();
       if(scores.size() != 0) {
         scores.add(scores.get(scores.size()-1) - 5);
@@ -230,7 +230,7 @@ void updating_scene_shiftOFF() {
 Displaying mover at the good position
 */
 void displaying_mover() {
-  gameSurface.translate(mover.location.x,-12,-mover.location.z);
+  gameSurface.translate(mover.location.x,-rayon -2,-mover.location.z);
   gameSurface.pushMatrix();
   gameSurface.rotateX(mover.location.z/rayon); // for the rotation of the sphere
   gameSurface.rotateY(mover.location.x/rayon);

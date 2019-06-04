@@ -1,16 +1,18 @@
 
 import processing.video.*;
-
+import gab.opencv.*;
 BlobDetection blobDetect = new BlobDetection();
 HoughClass hough = new HoughClass();
 QuadGraph quad = new QuadGraph();
+TwoDThreeD two_d = new TwoDThreeD(800,600,0.0);
 
 HScrollbar thresholdUpBar, thresholdBarminH,thresholdBarmaxH,thresholdBarminS,thresholdBarmaxS,thresholdBarminB,thresholdBarmaxB;
 float thresholdUp, minH, maxH, minS, maxS, minB, maxB;
 
 Capture cam;
 PImage img, img_accumulator, img_lines, img_edge;
-ArrayList<PVector> hough_list, quad_list;
+ArrayList<PVector> hough_list, quad_list,homo_quads;
+PVector angles,degree_angles;
 
 void settings() {
 size(640+10, 480/2 + 120);
@@ -156,9 +158,25 @@ void draw() {
     ellipse(quad.x, quad.y, 20, 20);
     popMatrix();
   }
+  //transfer quad corners to homogeneous coordinates
+  homo_quads = to_homo(quad_list);
+  angles = two_d.get3DRotations(quad_list);
+  degree_angles = angles.mult(180/PI);
+  if (degree_angles.x < 0){
+    degree_angles.x += 180.0;}
+  else if (degree_angles.x > 0){
+    degree_angles.x -= 180.0;}
+   print(degree_angles);
   //image(img, img.width/2, 0, img.width/2,img.height/2);
 /*
   */
+}
+ArrayList<PVector> to_homo(ArrayList<PVector> quad_list){
+  for(int i = 0; i < quad_list.size(); ++i){
+    PVector quad = quad_list.get(i);
+    quad.add(0,0,1.0);
+  }
+return quad_list;
 }
 
 PImage threshold_up(PImage img, float threshold){

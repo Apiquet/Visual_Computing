@@ -50,7 +50,11 @@ void setup() {
   homo_quads = to_homo(quad_list);
   angles = two_d.get3DRotations(quad_list);
   degree_angles = angles.mult(180/PI);
-  print(degree_angles);
+  if (degree_angles.x <0){
+    degree_angles.x += 180.0;}
+  if (degree_angles.x >0){
+    degree_angles.x -= 180.0;}
+   print(degree_angles);
 }
 
 List<PVector> to_homo(List<PVector> quad_list){

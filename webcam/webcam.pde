@@ -169,8 +169,7 @@ void draw() {
     degree_angles.x -= 180.0;}
    print(degree_angles);
   //image(img, img.width/2, 0, img.width/2,img.height/2);
-/*
-  */
+
 }
 ArrayList<PVector> to_homo(ArrayList<PVector> quad_list){
   for(int i = 0; i < quad_list.size(); ++i){

@@ -1,4 +1,5 @@
 class ImageProcessing extends PApplet {
+  PImage img, img2;
   Movie cam;
   float rx = 0;
   float rz = 0;
@@ -18,7 +19,7 @@ class ImageProcessing extends PApplet {
     else println("Cam not available");
     
     img = cam.get();
-  
+    img2 = cam.get();
     // Apply Gaussian Blur
     img.loadPixels();
     img.filter(BLUR, 1);
@@ -77,7 +78,7 @@ class ImageProcessing extends PApplet {
     quad_list = quad.findBestQuad(hough_list, img.width, img.height, max_quad_area, min_quad_area, true);
     //print(quad_list);
     //print(hough_list.size());
-    image(img, 0,0);
+    image(img2, 0,0);
   
     for(int i = 0; i < quad_list.size(); ++i){
       pushMatrix();

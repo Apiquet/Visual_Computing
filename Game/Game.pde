@@ -13,7 +13,7 @@ ImageProcessing imgproc = new ImageProcessing();
 HScrollbar thresholdUpBar, thresholdBarminH,thresholdBarmaxH,thresholdBarminS,thresholdBarmaxS,thresholdBarminB,thresholdBarmaxB;
 float thresholdUp, minH, maxH, minS, maxS, minB, maxB;
 
-PImage img, img_accumulator, img_lines, img_edge;
+PImage img_accumulator, img_lines, img_edge;
 ArrayList<PVector> hough_list, quad_list,homo_quads;
 PVector angles,degree_angles;
 Mover mover;

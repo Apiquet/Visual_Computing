@@ -12,7 +12,7 @@ TwoDThreeD two_d = new TwoDThreeD(800,600,0.0);
 HScrollbar thresholdUpBar, thresholdBarminH,thresholdBarmaxH,thresholdBarminS,thresholdBarmaxS,thresholdBarminB,thresholdBarmaxB;
 float thresholdUp, minH, maxH, minS, maxS, minB, maxB;
 
-Capture cam;
+Movie cam;
 PImage img, img_accumulator, img_lines, img_edge;
 ArrayList<PVector> hough_list, quad_list,homo_quads;
 PVector angles,degree_angles;
@@ -56,22 +56,8 @@ void setup() {
   globe.setStroke(false);
   
   creating_cylinder();
-   String[] cameras = Capture.list();
-  if (cameras.length == 0) 
-  {
-    println("There are no cameras available for capture.");
-    exit();
-  } 
-  else
-  {
-    println("Available cameras:");
-    for (int i = 0; i < cameras.length; i++) 
-    {
-      println(cameras[i]);
-    }
-    cam = new Capture(this, 640,480,cameras[0]);
-    cam.start();
-  }
+  cam = new Movie(this, "C:/Users/antho/Documents/GitHub/Visual_Computing/Game/testvideo.avi"); //You might have to put the absolute path. No worries we will change it when grading your project.
+  cam.loop();
 }
 
 void draw(){
@@ -103,19 +89,21 @@ void draw(){
 
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 44.928574, 237.59523, 35.214287, 252.57143, 0.0, 255.0);
+  img = thresholdHSB(img, 39.666668, 139.2381, 28.738096, 255.0, 58.690475, 161.5);
   img.updatePixels();//update pixels
   
-  //image(img, 0, 0, img.width/2,img.height/2);
-
   
   //println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
   
   img.loadPixels();
-  /*img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
+  img.filter(ERODE);
   img.filter(ERODE);
   img.filter(DILATE);
-  img.filter(DILATE);*/
+  img.filter(DILATE);
+  img.filter(DILATE);
+  img.filter(DILATE);
   img.updatePixels();
   
   
@@ -170,7 +158,7 @@ void draw(){
     degree_angles.x += 180.0;}
   else if (degree_angles.x > 0){
     degree_angles.x -= 180.0;}
-   print(degree_angles);
+   //print(degree_angles);
   //image(img, img.width/2, 0, img.width/2,img.height/2);
   
   rx = radians(degree_angles.x);

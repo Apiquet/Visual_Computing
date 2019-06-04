@@ -1,6 +1,7 @@
 
 import processing.video.*;
 import gab.opencv.*;
+OpenCV opencv = new OpenCV(this, 800, 600);;
 BlobDetection blobDetect = new BlobDetection();
 HoughClass hough = new HoughClass();
 QuadGraph quad = new QuadGraph();

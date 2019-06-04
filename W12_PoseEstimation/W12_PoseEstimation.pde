@@ -14,7 +14,7 @@ void settings() {
 }
 void setup() {
   
-  img = loadImage("board1.jpg");
+  img = loadImage("board4.jpg");
   image(img,0,0);
   img = pipeline(img, 56.487343, 139.76582, 65.20253, 255.0, 41.316456, 146.8671);
 

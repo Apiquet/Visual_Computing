@@ -92,11 +92,11 @@ void drawBarChart() {
   for(int i = 0; i < scores.size(); ++i) {
     if(scores.get(i) >= 0){
       barChart.fill(0, 255, 0);
-      barChart.rect(hs.getPos()*i, 50, hs.getPos(), -scores.get(i));
+      barChart.rect(hs.getPos()*i, 50, hs.getPos(), -scores.get(i)/2);
     }
     else if(scores.get(i) < 0){
       barChart.fill(255, 0, 0);
-      barChart.rect(hs.getPos()/4*i, 50, hs.getPos(), -scores.get(i));
+      barChart.rect(hs.getPos()*i, 50, hs.getPos(), -scores.get(i)/2);
     }
   }
   barChart.endDraw();

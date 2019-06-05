@@ -19,7 +19,7 @@ PVector angles,degree_angles;
 Mover mover;
 ParticleSystem ParticleSystem;
 HScrollbar hs;
-float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 5, cylinderBaseSize = 10, cylinderHeight = 20;
+float dx, dy, rx, rz, depth = 400, speed = 1.0, box_size = 300, rayon = 5, cylinderBaseSize = 10, cylinderHeight = 20, last = 0, score;
 boolean shiftIsPressed = false, user_won = false, was_clicked = false, particle_ON = false;
 int cylinderResolution = 40;
 ArrayList<PVector> clicks_shiftEnabled = new ArrayList(), clicks_shiftDisabled = new ArrayList();
@@ -27,7 +27,7 @@ ArrayList<Float> scores = new ArrayList<Float>();
 PShape globe, robotnik, openCylinder = new PShape();
 PVector particle_origin;  
 PFont f;
-String text_displayed = " ", text_score = " ", text_velocity = " ";
+String text_displayed = " ", text_score = " ", text_velocity = " ", text_last = " ";
 PGraphics gameSurface, scoreboard, barChart, topView;
 
 void settings() {
@@ -75,17 +75,16 @@ void draw(){
   
   rx = imgproc.rx;
   rz = imgproc.rz;
-  
-  
-  
 }
+
 ArrayList<PVector> to_homo(ArrayList<PVector> quad_list){
   for(int i = 0; i < quad_list.size(); ++i){
     PVector quad = quad_list.get(i);
     quad.add(0,0,1.0);
   }
-return quad_list;
+  return quad_list;
 }
+
 void drawBarChart() {
   barChart.beginDraw();
   barChart.background(200);
@@ -93,11 +92,11 @@ void drawBarChart() {
   for(int i = 0; i < scores.size(); ++i) {
     if(scores.get(i) >= 0){
       barChart.fill(0, 255, 0);
-      barChart.rect(hs.getPos()*i, 50, hs.getPos(), -scores.get(i)/2);
+      barChart.rect(hs.getPos()*i, 50, hs.getPos(), -scores.get(i));
     }
     else if(scores.get(i) < 0){
       barChart.fill(255, 0, 0);
-      barChart.rect(hs.getPos()*i, 50, hs.getPos(), -scores.get(i)/2);
+      barChart.rect(hs.getPos()/4*i, 50, hs.getPos(), -scores.get(i));
     }
   }
   barChart.endDraw();
@@ -152,6 +151,9 @@ void drawScoreboard(){
   text_velocity = "Velocity :"+ String.format("%.2f", mover.velocity.mag());
   scoreboard.text(text_velocity, 5, 40);
   
+  text_last = "Last hit :"+ String.format("%.2f", last);
+  scoreboard.text(text_last, 5, 60);
+  
   scoreboard.endDraw();
 }
 
@@ -165,7 +167,6 @@ void drawGame(){
 }
 
 void setting_scene_and_background() {
-
   gameSurface.camera(width/2, height/2, depth, 250, 250, 0, 0, 1, 0);
   //gameSurface.directionalLight(50, 100, 125, 0, -1, 0); 
   //gameSurface.ambientLight(102, 102, 102);
@@ -224,10 +225,10 @@ void updating_scene_shiftOFF() {
     displaying_robotnik();
   //if the user clicked on the plate in SHIFT ON mode, we start to add particles
   if(particle_ON) {
-    if(frameCount % 60 == 0 && !user_won) {
+    if(frameCount % 120 == 0 && !user_won) {
       ParticleSystem.addParticle();
       if(scores.size() != 0) {
-        scores.add(scores.get(scores.size()-1) - 5);
+        scores.add(scores.get(scores.size()-1) - 2);
       }
     }
     for(int i=0; i < ParticleSystem.particles.size(); i++) {
@@ -243,11 +244,15 @@ void updating_scene_shiftOFF() {
   mover.update(rx, rz);
   mover.checkEdges(box_size/2);
   if (!user_won) {
+    score = mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize);
     if(scores.size() == 0) {
-      scores.add(mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize));
+      scores.add(score);
     }
     else {
-    scores.add(scores.get(scores.size()-1) + mover.ckeckCylinderCollision(clicks_shiftDisabled, rayon, cylinderBaseSize));
+    scores.add(scores.get(scores.size()-1) + score);
+    }
+    if(score != 0) {
+      last = score;
     }
   }
   displaying_mover();
@@ -497,6 +502,7 @@ void creating_cylinder() {
   openCylinder.setTexture(tree);
   openCylinder.setStroke(false);
 }
+
 PImage threshold_up(PImage img, float threshold){
   // create a new, initially transparent, 'result' image
   PImage result = createImage(img.width, img.height, RGB);
@@ -530,6 +536,7 @@ PImage thresholdHSB(PImage img, float minH, float maxH, float minS, float maxS, 
   }
   return result;
 }
+
 boolean imagesEqual(PImage img1, PImage img2){
   if(img1.width != img2.width || img1.height != img2.height) return false;
   for(int i = 0; i < img1.width*img1.height ; i++)

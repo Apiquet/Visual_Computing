@@ -23,15 +23,15 @@ size(1000, 1000);
 void setup() {
   
   
-  thresholdBarmaxH = new HScrollbar(0, 1000/2+10, 640, 10);
-  thresholdBarminH = new HScrollbar(0, 1000/2+25, 640, 10);
-  thresholdBarmaxS = new HScrollbar(0, 1000/2+40, 640, 10);
-  thresholdBarminS = new HScrollbar(0, 1000/2+55, 640, 10);
-  thresholdBarmaxB = new HScrollbar(0, 1000/2+70, 640, 10);
-  thresholdBarminB = new HScrollbar(0, 1000/2+85, 640, 10);
-  thresholdUpBar = new HScrollbar(0, 480/2+110, 640, 10);
+  thresholdBarmaxH = new HScrollbar(0, 1000-10, 640, 10);
+  thresholdBarminH = new HScrollbar(0, 1000-25, 640, 10);
+  thresholdBarmaxS = new HScrollbar(0, 1000-40, 640, 10);
+  thresholdBarminS = new HScrollbar(0, 1000-55, 640, 10);
+  thresholdBarmaxB = new HScrollbar(0, 1000-70, 640, 10);
+  thresholdBarminB = new HScrollbar(0, 1000-85, 640, 10);
+  thresholdUpBar = new HScrollbar(0, 1000-100, 640, 10);
   
-  cam = new Movie(this, "C:/Users/antho/Documents/GitHub/Visual_Computing/test_video/testvideo.avi"); //You might have to put the absolute path. No worries we will change it when grading your project.
+  cam = new Movie(this, "/Users/huguesvinzant/Documents/Epfl/Cours/MA2/Introduction to Visual Computing/Visual_Computing/test_video/testvideo.avi"); //You might have to put the absolute path. No worries we will change it when grading your project.
   cam.loop();
 }
 
@@ -50,21 +50,17 @@ void draw() {
   thresholdBarmaxH.update();
   maxH = thresholdBarmaxH.getPos()*255;
   
-  
   thresholdBarminS.display();
   thresholdBarminS.update();
   minS = thresholdBarminS.getPos()*255;
-  
   
   thresholdBarmaxS.display();
   thresholdBarmaxS.update();
   maxS = thresholdBarmaxS.getPos()*255;
   
-  
   thresholdBarminB.display();
   thresholdBarminB.update();
   minB = thresholdBarminB.getPos()*255;
-  
   
   thresholdBarmaxB.display();
   thresholdBarmaxB.update();
@@ -88,13 +84,14 @@ void draw() {
 
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 39.666668, 139.2381, 28.738096, 255.0, 58.690475, 161.5);
+  //img = thresholdHSB(img, 39.666668, 139.2381, 28.738096, 255.0, 58.690475, 161.5);
+  img = thresholdHSB(img, minH, maxH, minS, maxS, minB, maxB);
   img.updatePixels();//update pixels
   
   image(img, 0, 0, img.width/2,img.height/2);
 
   
-  //println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
+  println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
   
   img.loadPixels();
   img.filter(ERODE);

@@ -36,7 +36,7 @@ void setup() {
     cam = new Capture(this, 640,480,cameras[0]);
     cam.start();
   }
-  /*
+  
   thresholdBarmaxH = new HScrollbar(0, 480/2+10, 640, 10);
   thresholdBarminH = new HScrollbar(0, 480/2+25, 640, 10);
   thresholdBarmaxS = new HScrollbar(0, 480/2+40, 640, 10);
@@ -44,11 +44,11 @@ void setup() {
   thresholdBarmaxB = new HScrollbar(0, 480/2+70, 640, 10);
   thresholdBarminB = new HScrollbar(0, 480/2+85, 640, 10);
   thresholdUpBar = new HScrollbar(0, 480/2+110, 640, 10);
-  */
+  
 }
 
 void draw() {
-  /*
+  
   // threshold bars
   thresholdUpBar.display();
   thresholdUpBar.update();
@@ -80,7 +80,7 @@ void draw() {
   
   thresholdBarmaxB.display();
   thresholdBarmaxB.update();
-  maxB = thresholdBarmaxB.getPos()*255;*/
+  maxB = thresholdBarmaxB.getPos()*255;
   
   
   // verifying cam is available
@@ -103,18 +103,10 @@ void draw() {
   img = thresholdHSB(img, 44.928574, 237.59523, 35.214287, 252.57143, 0.0, 255.0);
   img.updatePixels();//update pixels
   
-  //image(img, 0, 0, img.width/2,img.height/2);
+  image(img, 0, 0, img.width/2,img.height/2);
 
   
-  //println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB);
-  
-  img.loadPixels();
-  /*img.filter(ERODE);
-  img.filter(ERODE);
-  img.filter(DILATE);
-  img.filter(DILATE);*/
-  img.updatePixels();
-  
+  println(minH + ", " +maxH + ", " +minS + ", " +maxS + ", " +minB + ", " +maxB); 
   
   img.loadPixels();
   img.filter(DILATE);
@@ -143,13 +135,13 @@ void draw() {
   img.updatePixels();//update pixels
 
   
-  hough_list = hough.hough(img, 6);
+  /*hough_list = hough.hough(img, 6);
   int max_quad_area = img.width*img.height;
   int min_quad_area = 0;
   quad_list = quad.findBestQuad(hough_list, img.width, img.height, max_quad_area, min_quad_area, true);
   //print(quad_list);
   //print(hough_list.size());
-  image(img, 0,0);
+  //image(img, 0,0);
 
   for(int i = 0; i < quad_list.size(); ++i){
     pushMatrix();
@@ -167,8 +159,8 @@ void draw() {
     degree_angles.x += 180.0;}
   else if (degree_angles.x > 0){
     degree_angles.x -= 180.0;}
-   print(degree_angles);
-  //image(img, img.width/2, 0, img.width/2,img.height/2);
+   print(degree_angles);*/
+  image(img, img.width/2, 0, img.width/2,img.height/2);
 
 }
 ArrayList<PVector> to_homo(ArrayList<PVector> quad_list){

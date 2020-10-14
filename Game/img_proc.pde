@@ -4,7 +4,7 @@ class ImageProcessing extends PApplet {
   float rx = 0;
   float rz = 0;
   void settings(){
-    size(950, 500);
+    size(640, 480);
   }
   void setup(){
     String[] cameras = Capture.list();

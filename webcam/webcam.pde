@@ -100,7 +100,8 @@ void draw() {
 
   // Apply Color Thresholding
   img.loadPixels();
-  img = thresholdHSB(img, 44.928574, 237.59523, 35.214287, 252.57143, 0.0, 255.0);
+  img = thresholdHSB(img, 0.0, 255.0, 0.0, 49.785717, 188.61905, 255.0);
+  //img = thresholdHSB(img, minH, maxH, minS, maxS, minB, maxB);
   img.updatePixels();//update pixels
   
   image(img, 0, 0, img.width/2,img.height/2);

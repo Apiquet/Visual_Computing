@@ -1,14 +1,28 @@
 class ImageProcessing extends PApplet {
   PImage img, img2;
-  Movie cam;
+  Capture cam;
   float rx = 0;
   float rz = 0;
   void settings(){
-  size(950, 500, P3D);
-}
+    size(950, 500);
+  }
   void setup(){
-    cam = new Movie(this, "/Users/huguesvinzant/Documents/Epfl/Cours/MA2/Introduction to Visual Computing/Visual_Computing/Game/testvideo.avi"); //You might have to put the absolute path. No worries we will change it when grading your project.
-    cam.loop();
+    String[] cameras = Capture.list();
+    if (cameras.length == 0) 
+    {
+      println("There are no cameras available for capture.");
+      exit();
+    } 
+    else
+    {
+      println("Available cameras:");
+      for (int i = 0; i < cameras.length; i++) 
+      {
+        println(cameras[i]);
+      }
+      cam = new Capture(this, 640,480,cameras[0]);
+      cam.start();
+    }
   }
   void draw(){
     
@@ -27,7 +41,7 @@ class ImageProcessing extends PApplet {
   
     // Apply Color Thresholding
     img.loadPixels();
-    img = thresholdHSB(img, 39.666668, 139.2381, 28.738096, 255.0, 58.690475, 161.5);
+    img = thresholdHSB(img, 0.0, 255.0, 0.0, 60.309525, 142.4762, 255.0);
     img.updatePixels();//update pixels
     
     

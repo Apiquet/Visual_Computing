@@ -31,7 +31,7 @@ void setup() {
   thresholdBarminB = new HScrollbar(0, 1000-85, 640, 10);
   thresholdUpBar = new HScrollbar(0, 1000-100, 640, 10);
   
-  cam = new Movie(this, "/Users/huguesvinzant/Documents/Epfl/Cours/MA2/Introduction to Visual Computing/Visual_Computing/test_video/testvideo.avi"); //You might have to put the absolute path. No worries we will change it when grading your project.
+  cam = new Movie(this, "C:/Users/antho/Documents/GitHub/Visual_Computing/test_video/testvideo.avi"); //You might have to put the absolute path. No worries we will change it when grading your project.
   cam.loop();
 }
 
@@ -84,8 +84,8 @@ void draw() {
 
   // Apply Color Thresholding
   img.loadPixels();
-  //img = thresholdHSB(img, 39.666668, 139.2381, 28.738096, 255.0, 58.690475, 161.5);
-  img = thresholdHSB(img, minH, maxH, minS, maxS, minB, maxB);
+  img = thresholdHSB(img, 39.666668, 139.2381, 28.738096, 255.0, 58.690475, 161.5);
+  //img = thresholdHSB(img, minH, maxH, minS, maxS, minB, maxB);
   img.updatePixels();//update pixels
   
   image(img, 0, 0, img.width/2,img.height/2);
